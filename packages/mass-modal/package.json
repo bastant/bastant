@@ -1,0 +1,52 @@
+{
+  "name": "@mass/modal",
+  "version": "1.0.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "solid": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/source/index.js"
+      },
+      "import": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "browser": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      },
+      "node": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
+  },
+  "peerDependencies": {
+    "@mass/base": "workspace:^",
+    "solid-js": "^1.7.7"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -cw"
+  },
+  "devDependencies": {
+    "@mass/base": "workspace:*",
+    "rollup": "^3.28.0",
+    "rollup-plugin-ts": "^3.4.4",
+    "rollup-preset-solid": "^2.0.1",
+    "rollup-ts": "^1.0.4",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.2"
+  }
+}

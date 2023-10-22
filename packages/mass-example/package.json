@@ -1,0 +1,25 @@
+{
+  "name": "mass-example",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "watch": "vite dev",
+    "build": "tsc && vite build --base=/api-static/frontend/.",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mass/base": "workspace:*",
+    "@mass/fileupload": "workspace:*",
+    "@mass/form": "workspace:*",
+    "@mass/i18n": "workspace:*",
+    "@mass/modal": "workspace:*",
+    "@solidjs/router": "^0.8.3",
+    "solid-js": "^1.7.7"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.2",
+    "vite": "^4.4.2",
+    "vite-plugin-solid": "^2.7.0"
+  }
+}
