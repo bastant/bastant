@@ -1,5 +1,5 @@
 {
-  "name": "@mass/modal",
+  "name": "@bastant/form",
   "version": "1.0.0",
   "type": "module",
   "files": [
@@ -8,6 +8,7 @@
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
+  "repository": "https://github.com/bastant/bastant",
   "exports": {
     ".": {
       "solid": {
@@ -33,20 +34,22 @@
     }
   },
   "peerDependencies": {
-    "@mass/base": "workspace:^",
     "solid-js": "^1.7.7"
   },
   "scripts": {
     "build": "rollup -c",
-    "watch": "rollup -cw"
+    "watch": "rollup -cw",
+    "prepublish": "rollup -c"
   },
   "devDependencies": {
-    "@mass/base": "workspace:*",
     "rollup": "^3.28.0",
     "rollup-plugin-ts": "^3.4.4",
     "rollup-preset-solid": "^2.0.1",
     "rollup-ts": "^1.0.4",
     "typescript": "^5.0.2",
     "vite": "^4.4.2"
+  },
+  "dependencies": {
+    "type-fest": "^4.3.2"
   }
 }

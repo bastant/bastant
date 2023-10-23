@@ -1,4 +1,4 @@
-import { ValidationEvent, createFormApi } from "@mass/form";
+import { ValidationEvent, createFormApi } from "@bastant/form";
 import { createRenderEffect } from "solid-js";
 
 export interface Settings {

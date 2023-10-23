@@ -5,8 +5,8 @@ import {
   required,
   min,
   FieldApi,
-} from "@mass/form";
-import { Fixed, Trans, useFixedTFunc, useTFunc } from "@mass/i18n";
+} from "@bastant/form";
+import { Fixed, Trans, useFixedTFunc, useTFunc } from "@bastant/i18n";
 import {
   For,
   Show,

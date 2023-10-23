@@ -9,7 +9,7 @@ import {
   onMount,
   createMemo,
 } from "solid-js";
-import { DynamicShow, Reveal } from "@mass/base";
+import { DynamicShow, Reveal } from "@bastant/base";
 
 export interface ModalProps {
   show?: boolean;

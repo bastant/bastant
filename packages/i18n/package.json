@@ -1,5 +1,5 @@
 {
-  "name": "@mass/form",
+  "name": "@bastant/i18n",
   "version": "1.0.0",
   "type": "module",
   "files": [
@@ -8,6 +8,7 @@
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
+  "repository": "https://github.com/bastant/bastant",
   "exports": {
     ".": {
       "solid": {
@@ -37,7 +38,8 @@
   },
   "scripts": {
     "build": "rollup -c",
-    "watch": "rollup -cw"
+    "watch": "rollup -cw",
+    "prepublish": "rollup -c"
   },
   "devDependencies": {
     "rollup": "^3.28.0",
@@ -48,6 +50,8 @@
     "vite": "^4.4.2"
   },
   "dependencies": {
+    "html-parse-string": "^0.0.9",
+    "i18next": "^23.4.4",
     "type-fest": "^4.3.2"
   }
 }

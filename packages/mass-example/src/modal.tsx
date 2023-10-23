@@ -1,5 +1,5 @@
-import { createModal } from "@mass/modal";
-import { directives } from "@mass/base";
+import { createModal } from "@bastant/modal";
+import { directives } from "@bastant/base";
 import { onCleanup, onMount } from "solid-js";
 const clickOutside = directives.clickOutside;
 const keypressOutside = directives.keypressOutside;

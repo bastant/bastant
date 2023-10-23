@@ -1,4 +1,4 @@
-import { ListModel, createListState } from "@mass/form";
+import { ListModel, createListState } from "@bastant/form";
 import { For, createSignal, createUniqueId } from "solid-js";
 
 interface Model extends ListModel {

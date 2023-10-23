@@ -1397,6 +1397,95 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bastant/base@workspace:*, @bastant/base@workspace:packages/base":
+  version: 0.0.0-use.local
+  resolution: "@bastant/base@workspace:packages/base"
+  dependencies:
+    "@solid-primitives/intersection-observer": ^2.1.3
+    "@solid-primitives/refs": ^1.0.5
+    "@solid-primitives/transition-group": ^1.0.3
+    rollup: ^3.28.0
+    rollup-plugin-ts: ^3.4.4
+    rollup-preset-solid: ^2.0.1
+    rollup-ts: ^1.0.4
+    type-fest: ^4.3.2
+    typescript: ^5.0.2
+    vite: ^4.4.2
+  peerDependencies:
+    solid-js: ^1.7.7
+  languageName: unknown
+  linkType: soft
+
+"@bastant/fileupload@workspace:*, @bastant/fileupload@workspace:packages/fileupload":
+  version: 0.0.0-use.local
+  resolution: "@bastant/fileupload@workspace:packages/fileupload"
+  dependencies:
+    glob: ^10.3.4
+    mkdirp: ^3.0.1
+    rollup: ^3.28.0
+    rollup-plugin-styles: ^4.0.0
+    rollup-plugin-ts: ^3.4.4
+    rollup-preset-solid: ^2.0.1
+    rollup-ts: ^1.0.4
+    sass: ^1.66.1
+    typescript: ^5.0.2
+    vite: ^4.4.2
+  peerDependencies:
+    solid-js: ^1.7.7
+  languageName: unknown
+  linkType: soft
+
+"@bastant/form@workspace:*, @bastant/form@workspace:packages/form":
+  version: 0.0.0-use.local
+  resolution: "@bastant/form@workspace:packages/form"
+  dependencies:
+    rollup: ^3.28.0
+    rollup-plugin-ts: ^3.4.4
+    rollup-preset-solid: ^2.0.1
+    rollup-ts: ^1.0.4
+    type-fest: ^4.3.2
+    typescript: ^5.0.2
+    vite: ^4.4.2
+  peerDependencies:
+    solid-js: ^1.7.7
+  languageName: unknown
+  linkType: soft
+
+"@bastant/i18n@workspace:*, @bastant/i18n@workspace:packages/i18n":
+  version: 0.0.0-use.local
+  resolution: "@bastant/i18n@workspace:packages/i18n"
+  dependencies:
+    html-parse-string: ^0.0.9
+    i18next: ^23.4.4
+    rollup: ^3.28.0
+    rollup-plugin-ts: ^3.4.4
+    rollup-preset-solid: ^2.0.1
+    rollup-ts: ^1.0.4
+    type-fest: ^4.3.2
+    typescript: ^5.0.2
+    vite: ^4.4.2
+  peerDependencies:
+    solid-js: ^1.7.7
+  languageName: unknown
+  linkType: soft
+
+"@bastant/modal@workspace:*, @bastant/modal@workspace:packages/modal":
+  version: 0.0.0-use.local
+  resolution: "@bastant/modal@workspace:packages/modal"
+  dependencies:
+    "@bastant/base": "workspace:*"
+    rollup: ^3.28.0
+    rollup-plugin-ts: ^3.4.4
+    rollup-preset-solid: ^2.0.1
+    rollup-ts: ^1.0.4
+    typescript: ^5.0.2
+    vite: ^4.4.2
+  peerDependencies:
+    "@bastant/base": "workspace:^"
+    solid-js: ^1.7.7
+  languageName: unknown
+  linkType: soft
+
 "@esbuild/android-arm64@npm:0.18.20":
   version: 0.18.20
   resolution: "@esbuild/android-arm64@npm:0.18.20"
@@ -1630,95 +1719,6 @@ __metadata:
   checksum: 956a6f0f6fec060fb48c6bf1f5ec2064e13cd38c8be3873877d4b92b4a27ba58289a34071752671262a3e3c202abcc3fa2aac64d8447b4b0fa1ba3c9047f1c20
   languageName: node
   linkType: hard
-
-"@mass/base@workspace:*, @mass/base@workspace:packages/mass-base":
-  version: 0.0.0-use.local
-  resolution: "@mass/base@workspace:packages/mass-base"
-  dependencies:
-    "@solid-primitives/intersection-observer": ^2.1.3
-    "@solid-primitives/refs": ^1.0.5
-    "@solid-primitives/transition-group": ^1.0.3
-    rollup: ^3.28.0
-    rollup-plugin-ts: ^3.4.4
-    rollup-preset-solid: ^2.0.1
-    rollup-ts: ^1.0.4
-    type-fest: ^4.3.2
-    typescript: ^5.0.2
-    vite: ^4.4.2
-  peerDependencies:
-    solid-js: ^1.7.7
-  languageName: unknown
-  linkType: soft
-
-"@mass/fileupload@workspace:*, @mass/fileupload@workspace:packages/mass-fileupload":
-  version: 0.0.0-use.local
-  resolution: "@mass/fileupload@workspace:packages/mass-fileupload"
-  dependencies:
-    glob: ^10.3.4
-    mkdirp: ^3.0.1
-    rollup: ^3.28.0
-    rollup-plugin-styles: ^4.0.0
-    rollup-plugin-ts: ^3.4.4
-    rollup-preset-solid: ^2.0.1
-    rollup-ts: ^1.0.4
-    sass: ^1.66.1
-    typescript: ^5.0.2
-    vite: ^4.4.2
-  peerDependencies:
-    solid-js: ^1.7.7
-  languageName: unknown
-  linkType: soft
-
-"@mass/form@workspace:*, @mass/form@workspace:packages/mass-form":
-  version: 0.0.0-use.local
-  resolution: "@mass/form@workspace:packages/mass-form"
-  dependencies:
-    rollup: ^3.28.0
-    rollup-plugin-ts: ^3.4.4
-    rollup-preset-solid: ^2.0.1
-    rollup-ts: ^1.0.4
-    type-fest: ^4.3.2
-    typescript: ^5.0.2
-    vite: ^4.4.2
-  peerDependencies:
-    solid-js: ^1.7.7
-  languageName: unknown
-  linkType: soft
-
-"@mass/i18n@workspace:*, @mass/i18n@workspace:packages/mass-i18n":
-  version: 0.0.0-use.local
-  resolution: "@mass/i18n@workspace:packages/mass-i18n"
-  dependencies:
-    html-parse-string: ^0.0.9
-    i18next: ^23.4.4
-    rollup: ^3.28.0
-    rollup-plugin-ts: ^3.4.4
-    rollup-preset-solid: ^2.0.1
-    rollup-ts: ^1.0.4
-    type-fest: ^4.3.2
-    typescript: ^5.0.2
-    vite: ^4.4.2
-  peerDependencies:
-    solid-js: ^1.7.7
-  languageName: unknown
-  linkType: soft
-
-"@mass/modal@workspace:*, @mass/modal@workspace:packages/mass-modal":
-  version: 0.0.0-use.local
-  resolution: "@mass/modal@workspace:packages/mass-modal"
-  dependencies:
-    "@mass/base": "workspace:*"
-    rollup: ^3.28.0
-    rollup-plugin-ts: ^3.4.4
-    rollup-preset-solid: ^2.0.1
-    rollup-ts: ^1.0.4
-    typescript: ^5.0.2
-    vite: ^4.4.2
-  peerDependencies:
-    "@mass/base": "workspace:^"
-    solid-js: ^1.7.7
-  languageName: unknown
-  linkType: soft
 
 "@mdn/browser-compat-data@npm:^5.3.7":
   version: 5.3.10
@@ -3720,11 +3720,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "mass-example@workspace:packages/mass-example"
   dependencies:
-    "@mass/base": "workspace:*"
-    "@mass/fileupload": "workspace:*"
-    "@mass/form": "workspace:*"
-    "@mass/i18n": "workspace:*"
-    "@mass/modal": "workspace:*"
+    "@bastant/base": "workspace:*"
+    "@bastant/fileupload": "workspace:*"
+    "@bastant/form": "workspace:*"
+    "@bastant/i18n": "workspace:*"
+    "@bastant/modal": "workspace:*"
     "@solidjs/router": ^0.8.3
     solid-js: ^1.7.7
     typescript: ^5.0.2

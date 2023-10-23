@@ -8,8 +8,8 @@ import {
   min,
   required,
   FormState,
-} from "@mass/form";
-import { Trans, useFixedTFunc } from "@mass/i18n";
+} from "@bastant/form";
+import { Trans, useFixedTFunc } from "@bastant/i18n";
 
 export default function Page() {
   const [settings, setSettings] = createSignal<Settings>();

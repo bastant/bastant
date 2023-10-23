@@ -1,5 +1,5 @@
-import { createSway } from "@mass/base";
-import { Reveal, StackView } from "@mass/base";
+import { createSway } from "@bastant/base";
+import { Reveal, StackView } from "@bastant/base";
 import {
   Match,
   Show,

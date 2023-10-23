@@ -1,18 +1,18 @@
 import { render } from "solid-js/web";
-import { createForm } from "@mass/form";
-import { createModal } from "@mass/modal";
+import { createForm } from "@bastant/form";
+import { createModal } from "@bastant/modal";
 import {
   FileInput,
   LocalFile,
   UploadButton,
   createFileManager,
   Preview,
-} from "@mass/fileupload";
+} from "@bastant/fileupload";
 
 import { For, createSignal, lazy } from "solid-js";
 import { A, Route, Router, Routes } from "@solidjs/router";
-import { Fixed, I18nProvider, Trans } from "@mass/i18n";
-import { Reveal } from "@mass/base";
+import { Fixed, I18nProvider, Trans } from "@bastant/i18n";
+import { Reveal } from "@bastant/base";
 
 function App() {
   return (
