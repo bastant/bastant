@@ -9,6 +9,9 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "repository": "https://github.com/bastant/bastant",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "exports": {
     ".": {
       "import": {

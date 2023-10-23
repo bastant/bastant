@@ -2,6 +2,9 @@
   "name": "mass-workspace",
   "packageManager": "yarn@3.6.1",
   "type": "module",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "scripts": {
     "watch": "yarn workspaces foreach -p -i -j 10 run watch",
     "build": "yarn workspaces foreach --no-private -p -i run build"
