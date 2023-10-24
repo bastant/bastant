@@ -25,7 +25,7 @@ export interface FormApi<T> {
 }
 
 export interface FormOptions<T> {
-  defaultValues?: Partial<T> | Accessor<T>;
+  defaultValues?: Partial<T> | Accessor<T | undefined>;
   submit?: (value: Partial<T>) => Promise<void> | void;
   validations?: Partial<Record<keyof T, Validation[]>>;
   submitOnError?: Accessor<boolean> | boolean;
