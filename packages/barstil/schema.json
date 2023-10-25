@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "colors": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string", "number"]
+      }
+    },
+    "spacings": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string", "number"]
+      }
+    },
+    "sizes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string", "number"]
+      }
+    },
+    "breakpoints": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string"]
+      }
+    },
+    "lineHeights": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string", "number"]
+      }
+    },
+    "fontSizes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string", "number"]
+      }
+    },
+    "fontWeights": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string", "number"]
+      }
+    },
+    "shadows": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string", "number"]
+      }
+    },
+    "radii": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string", "number"]
+      }
+    },
+    "zIndices": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string", "number"]
+      }
+    },
+    "variables": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string", "number"]
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": ["colors", "spacings", "breakpoints"]
+}

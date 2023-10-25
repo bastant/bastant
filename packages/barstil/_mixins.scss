@@ -1,0 +1,56 @@
+@use "sass:map";
+
+$directions: (top, bottom, left, right);
+
+@mixin create-dir-prop($map, $prop, $section: null) {
+  @each $name, $value in $map {
+    @if $section {
+      $value: var(--#{$section}-#{$name}, $value);
+    }
+    &-#{$name} {
+      #{$prop}: $value;
+
+      @each $dir in $directions {
+        &-#{$dir} {
+          #{$prop}-#{$dir}: $value;
+        }
+      }
+    }
+  }
+}
+
+@mixin create-prop($map, $prop) {
+  @each $name, $value in $map {
+    &-#{$name} {
+      #{$prop}: $value;
+    }
+  }
+}
+
+@mixin margins($map) {
+  @include create-dir-prop($map, margin, spacings);
+}
+
+@mixin paddings($map) {
+  @include create-dir-prop($map, padding, spacings);
+}
+
+@mixin colors($map, $prop) {
+  @each $name, $value in $map {
+    &-#{$name} {
+      #{$prop}: $value;
+    }
+  }
+}
+
+@mixin colors-prop($map, $prop) {
+  @each $name, $value in $map {
+    &-#{$name}-#{$prop} {
+      #{$prop}: $value;
+    }
+  }
+}
+
+@mixin radii($map) {
+  @include create-dir-prop($map, border-radius, radii);
+}

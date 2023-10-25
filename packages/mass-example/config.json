@@ -1,0 +1,50 @@
+{
+    "$schema": "../../node_modules/barstil/schema.json",
+    "colors": {
+      "background": "#fff"
+    },
+    "spacings": {
+      "mini": "8px",
+      "small": "12px",
+      "normal": "24px",
+      "large": "48px"
+    },
+    "breakpoints": {
+      "mobile": "min-width: 0",
+      "tablet": "min-width: 800px",
+      "desktop": "min-width: 1200px",
+      "largeDesktop": "min-width: 1800px"
+    },
+    "fontWeights": {
+      "thin": 200,
+      "light": 300,
+      "bold": 600
+    },
+    "fontSizes": {
+      "pageHeader": "64px",
+      "h1": "48px",
+      "h2": "42px",
+      "h3": "36px",
+      "p": "16px",
+      "small": "12px"
+    },
+    "lineHeights": {
+      "normal": 1.2
+    },
+    "sizes": {
+      "containerWidth": "1320px",
+      "headerHeight": "80px",
+      "headerHeightMobile": "60px"
+    },
+    "radii": {
+      "small": "4px",
+      "normal": "8px",
+      "large": "12px"
+    },
+    "zIndices": {
+      "navBar": 1000
+    },
+    "shadows": {
+      "1": "3px 3px 3px 2px rgba(0, 0, 0, 0.5)"
+    }
+  }

@@ -6,7 +6,8 @@
   "scripts": {
     "watch": "vite dev",
     "build": "tsc && vite build --base=/api-static/frontend/.",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build-styling": "node build.mjs"
   },
   "dependencies": {
     "@bastant/base": "workspace:*",
@@ -15,6 +16,7 @@
     "@bastant/i18n": "workspace:*",
     "@bastant/modal": "workspace:*",
     "@solidjs/router": "^0.8.3",
+    "barstil": "workspace:*",
     "solid-js": "^1.7.7"
   },
   "devDependencies": {

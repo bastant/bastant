@@ -1,0 +1,24 @@
+{
+  "name": "barstil",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w"
+  },
+  "devDependencies": {
+    "@types/node": "^20.6.3",
+    "typescript": "^5.2.2"
+  },
+  "files": [
+    "lib/*.js",
+    "*.scss"
+  ],
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "dependencies": {
+    "dedent": "^1.5.1",
+    "inflection": "^2.0.1",
+    "jsonschema": "^1.4.1"
+  }
+}
