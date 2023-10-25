@@ -23,39 +23,35 @@ export default function ModalPage() {
         Open
       </button>
       <Modal>
-        {(close) => {
-          return (
-            <div
-              style="height:4400px;width:400px;background:white;margin:10px auto;"
-              use:clickOutside={() => {
-                console.log("click");
-                api.close();
-              }}
-              use:keypressOutside={(e) => {
-                if (e.key == "Escape") {
-                  api.close();
-                }
-              }}
-            >
-              <h1
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                Hello, World!
-              </h1>
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopImmediatePropagation();
-                  e.stopPropagation();
-                }}
-              >
-                Hello
-              </button>
-            </div>
-          );
-        }}
+        <div
+          style="height:4400px;width:400px;background:white;margin:10px auto;"
+          use:clickOutside={() => {
+            console.log("click");
+            api.close();
+          }}
+          use:keypressOutside={(e) => {
+            if (e.key == "Escape") {
+              api.close();
+            }
+          }}
+        >
+          <h1
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            Hello, World!
+          </h1>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopImmediatePropagation();
+              e.stopPropagation();
+            }}
+          >
+            Hello
+          </button>
+        </div>
       </Modal>
     </div>
   );

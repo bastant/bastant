@@ -9,7 +9,9 @@ export function clickOutside<T extends HTMLElement>(
   };
   document.body.addEventListener("click", onClick);
 
-  onCleanup(() => document.body.removeEventListener("click", onClick));
+  onCleanup(() => {
+    document.body.removeEventListener("click", onClick);
+  });
 }
 
 declare module "solid-js" {

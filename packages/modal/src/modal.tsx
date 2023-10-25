@@ -13,7 +13,7 @@ import { DynamicShow, Reveal } from "@bastant/base";
 
 export interface ModalProps {
   show?: boolean;
-  children?: ((close: () => void) => JSXElement) | JSXElement;
+  children?: JSXElement; // ((close: () => void) => JSXElement) | JSXElement;
 }
 
 export interface CreateModalApiOptions {
@@ -38,15 +38,15 @@ export function createModalApi(
       shouldShow(!!props.show);
     });
 
-    const children = createMemo(() => {
-      return typeof props.children === "function"
-        ? props.children(() => shouldShow(false))
-        : props.children;
-    });
+    // const children = createMemo(() => {
+    //   return typeof props.children === "function"
+    //     ? props.children(() => shouldShow(false))
+    //     : props.children;
+    // });
 
     return (
       <Show when={show()}>
-        <Portal mount={options.mount}>{children()}</Portal>
+        <Portal mount={options.mount}>{props.children}</Portal>
       </Show>
     );
   };
@@ -101,11 +101,12 @@ export function createModal(options: CreateModalOptions = {}): ModalControl {
   const [show, shouldShow] = createSignal(false);
 
   const Modal = (props: ModalProps) => {
-    const children = createMemo(() => {
-      return typeof props.children === "function"
-        ? props.children(() => shouldShow(false))
-        : props.children;
-    });
+    // const children = createMemo(() => {
+    //   console.log("INIT HER");
+    //   return typeof props.children === "function"
+    //     ? props.children(() => shouldShow(false))
+    //     : props.children;
+    // });
 
     return (
       <InnerModal {...props}>
@@ -134,7 +135,7 @@ export function createModal(options: CreateModalOptions = {}): ModalControl {
               duration={200}
               delay={show() ? 100 : 0}
             >
-              {children()}
+              {props.children}
             </DynamicShow>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { createSway } from "@bastant/base";
+// import { createSway } from "@bastant/base";
 import { Reveal, StackView } from "@bastant/base";
 import {
   Match,
@@ -16,7 +16,7 @@ export default function UtilsPage() {
 
   return (
     <div>
-      <Dropdown />
+      {/* <Dropdown /> */}
       <button onClick={() => setShow(!show())}>
         {show() ? "hide" : "show"}
       </button>
@@ -83,41 +83,41 @@ function Hello() {
   return <div>Hello, World!</div>;
 }
 
-function Dropdown() {
-  const [targetRef, setTargetRef] = createSignal<Element>();
-  const [el, setEl] = createSignal<Element>();
-  const [show, setShow] = createSignal(false);
+// function Dropdown() {
+//   const [targetRef, setTargetRef] = createSignal<Element>();
+//   const [el, setEl] = createSignal<Element>();
+//   const [show, setShow] = createSignal(false);
 
-  const api = createSway(targetRef as any, el, {
-    positon: "top",
-  });
+//   const api = createSway(targetRef as any, el, {
+//     positon: "top",
+//   });
 
-  createEffect(() => {
-    if (show()) {
-      api.track();
-    } else {
-      api.untrack();
-    }
-  });
+//   createEffect(() => {
+//     if (show()) {
+//       api.track();
+//     } else {
+//       api.untrack();
+//     }
+//   });
 
-  return (
-    <div style="position: relative; width: 500px; height: 500px;overflow:auto">
-      <div style="height:1000px;">
-        <button
-          style="position: absolute; top: 200px; left:20px;"
-          onClick={() => {
-            setShow(!show());
-          }}
-          ref={setTargetRef}
-        >
-          Test
-        </button>
-        <Show when={show()}>
-          <div ref={setEl}>
-            <h1>Hello, World!</h1>
-          </div>
-        </Show>
-      </div>
-    </div>
-  );
-}
+//   return (
+//     <div style="position: relative; width: 500px; height: 500px;overflow:auto">
+//       <div style="height:1000px;">
+//         <button
+//           style="position: absolute; top: 200px; left:20px;"
+//           onClick={() => {
+//             setShow(!show());
+//           }}
+//           ref={setTargetRef}
+//         >
+//           Test
+//         </button>
+//         <Show when={show()}>
+//           <div ref={setEl}>
+//             <h1>Hello, World!</h1>
+//           </div>
+//         </Show>
+//       </div>
+//     </div>
+//   );
+// }
