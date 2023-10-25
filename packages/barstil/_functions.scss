@@ -1,0 +1,35 @@
+@use "sass:math";
+
+$html-font-size: 16px;
+@function strip-unit($value) {
+  @return math.div($value, ($value * 0 + 1));
+}
+
+@function rem($value) {
+  $remValue: math.div(strip-unit($value), strip-unit($html-font-size)) * 1rem;
+  @return $remValue;
+}
+
+@function color($color-map, $color) {
+  @if map-has-key($color-map, $color) {
+    // Prints a media query based on the value
+    @return var(--color-#{$color}, map-get($color-map, $color));
+  }
+  // If the key doesn't exist in the map
+  @else {
+    @warn "Unfortunately, no value could be retrieved from `#{$color-map}`. "
+          + "Available colors are: #{map-keys($color-map)}.";
+  }
+}
+
+@function variable($map, $item, $prefix) {
+  @if map-has-key($map, $item) {
+    // Prints a media query based on the value
+    @return var(--#{$prefix}-#{$item}, map-get($map, $item));
+  }
+  // If the key doesn't exist in the map
+  @else {
+    @error "Unfortunately, no value could be retrieved from `#{$map}`.  with key: #{$item}"
+          + "Available values are: #{map-keys($map)}.";
+  }
+}

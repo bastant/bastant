@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "rootDir": "./src",
+    "outDir": "./lib",
+    "declaration": true,
+    "types": ["node"]
+  }
+}
