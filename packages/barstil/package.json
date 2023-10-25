@@ -1,6 +1,10 @@
 {
   "name": "@bastant/barstil",
   "version": "0.0.1",
+  "repository": "https://github.com/bastant/bastant",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "type": "module",
   "scripts": {
     "build": "tsc",
