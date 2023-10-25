@@ -1,0 +1,20 @@
+@use "_config.scss" as *;
+@use "barstil";
+.color {
+  @include barstil.create-prop($colors-map, color, colors);
+}
+.background-color {
+  @include barstil.create-prop($colors-map, background-color, colors);
+}
+.padding {
+  @include barstil.create-dir-prop($spacings-map, padding, spacings);
+}
+.margin {
+  @include barstil.create-dir-prop($spacings-map, margin, spacings);
+}
+.font-weight {
+  @include barstil.create-prop($font-weights-map, font-weight, fontWeights);
+}
+.font-size {
+  @include barstil.create-prop($font-sizes-map, font-size, fontSizes);
+}

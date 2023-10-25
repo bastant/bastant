@@ -19,8 +19,11 @@ $directions: (top, bottom, left, right);
   }
 }
 
-@mixin create-prop($map, $prop) {
+@mixin create-prop($map, $prop, $section: null) {
   @each $name, $value in $map {
+    @if $section {
+      $value: var(--#{$section}-#{$name}, $value);
+    }
     &-#{$name} {
       #{$prop}: $value;
     }

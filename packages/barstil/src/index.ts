@@ -4,6 +4,7 @@ import { create as createScripts } from "./javascript.js";
 import { create as createSass } from "./sass.js";
 
 import Path from "node:path";
+import fs from "node:fs/promises";
 
 export interface Options {
   /// Path to config
@@ -26,14 +27,14 @@ export async function create(options: Options) {
     pxtoRem: options.rem,
   });
 
-  await createSass(sections, {
+  const sass = await createSass(sections, {
     path: Path.join(options.output.sass, "_config.scss"),
     classes: options.helpers
       ? Path.join(options.output.script, "helpers.module.scss")
       : void 0,
   });
 
-  await createScripts(sections, {
+  const scripts = await createScripts(sections, {
     ts: options.typescript,
     path: Path.join(
       options.output.script,
@@ -42,10 +43,16 @@ export async function create(options: Options) {
     classes: options.helpers
       ? Path.join(
           options.output.script,
-          "helpers" + options.typescript ? ".ts" : ".js"
+          "helpers" + (options.typescript ? ".ts" : ".js")
         )
       : void 0,
   });
+
+  await Promise.all(
+    [...sass, ...scripts].map((item) => {
+      return fs.writeFile(item.name, item.content);
+    })
+  );
 }
 
 // import * as fs from "node:fs/promises";

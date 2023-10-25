@@ -14,11 +14,13 @@ import { A, Route, Router, Routes } from "@solidjs/router";
 import { Fixed, I18nProvider, Trans } from "@bastant/i18n";
 import { Reveal } from "@bastant/base";
 
+import { margin } from "./styling/helpers.js";
+
 function App() {
   return (
     <Router>
       <Fixed keyPrefix="nav">
-        <ul>
+        <ul classList={margin({ m: "normal" })}>
           <li>
             <A href="/form">
               <Trans key="form">Forms</Trans>

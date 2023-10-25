@@ -1,4 +1,11 @@
-import { dasherize, inflect, tableize, underscore, classify } from "inflection";
+import {
+  dasherize,
+  inflect,
+  tableize,
+  underscore,
+  classify,
+  camelize,
+} from "inflection";
 import { Config } from "./config.js";
 import { Section, SectionName } from "./utils.js";
 import dedent from "dedent";
@@ -52,15 +59,16 @@ export async function create(sections: Section[], options: CreateOptions) {
           if (["padding", "margin"].includes(prop)) {
             return createDirProp(section, prop, entry);
           } else {
-            return dedent`
-          .${prop} {
-            @include barstil.create-prop($${section.cssName}-map, ${prop}, ${section.name});
-          }
-          `;
+            return createProp(section, prop, entry);
           }
         });
       })
       .filter(Boolean);
+
+    classes.unshift(dedent`
+      import {SPACINGS, FONT_WEIGHTS, COLORS, FONT_SIZES} from "./config.js";
+      import css from "./helpers.module.scss";
+      `);
 
     files.push({
       name: options.classes,
@@ -68,7 +76,36 @@ export async function create(sections: Section[], options: CreateOptions) {
     });
   }
 
-  console.log(files);
+  return files;
+}
+
+function createProp(
+  section: SectionName,
+  prop: string,
+  entry: Record<string, string | number>
+) {
+  const cases = [];
+
+  for (const varname in entry) {
+    cases.push(`case "${varname}": return css["${prop}-${varname}"];`);
+  }
+
+  const typeName = classify(prop.replace(/\-/, "_"));
+
+  return dedent`
+  export type ${typeName} = keyof typeof ${underscore(
+    section.name
+  ).toUpperCase()}
+  export function ${camelize(
+    prop.replace(/\-/, "_"),
+    true
+  )}(opts: ${typeName}) {
+    switch (opts) {
+      ${cases.join("\n")}
+      default: return void 0
+    }
+  }
+  `;
 }
 
 function createDirProp(
@@ -79,11 +116,15 @@ function createDirProp(
   const directions = ["top", "bottom", "left", "right"];
   const n = prop[0];
 
+  const typeName = classify(prop.replace(/\-/, "_"));
+
   const cases = [];
-  const interfaces = directions.map(
-    (m) => `${n}${m[0]}: keyof typeof ${underscore(section.name).toUpperCase()}`
-  );
+  const interfaces = directions.map((m) => `${n}${m[0]}?: ${typeName}`);
+
+  interfaces.push(`${n}?: ${typeName}`);
+
   for (const varname in entry) {
+    cases.push(`[css['${prop}-${varname}']]: opts.${n} == "${varname}"`);
     for (const dir of directions) {
       const d = dir[0];
       cases.push(
@@ -95,10 +136,16 @@ function createDirProp(
   const interfaceName = classify(prop + "_Options");
 
   return dedent`
-  export ${interfaceName} {
+  export type ${typeName} = keyof typeof ${underscore(
+    section.name
+  ).toUpperCase()};
+  export interface ${interfaceName} {
     ${interfaces.join(";\n  ")}
   }
-  export function ${section.name}(opts: ${interfaceName}) {
+  export function ${camelize(
+    prop.replace(/\-/, "_"),
+    true
+  )}(opts: ${interfaceName}) {
     return {
         ${cases.join(",\n  ")}
     }

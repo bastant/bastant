@@ -29,7 +29,7 @@ export function normalizeConfig(
   const sections = [];
 
   for (const key in config) {
-    sections.push(normalizeSection(key as any, config[key]));
+    sections.push(normalizeSection(key as any, config[key], options));
   }
 
   return sections;

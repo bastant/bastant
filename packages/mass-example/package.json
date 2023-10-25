@@ -10,13 +10,13 @@
     "build-styling": "node build.mjs"
   },
   "dependencies": {
+    "@bastant/barstil": "workspace:*",
     "@bastant/base": "workspace:*",
     "@bastant/fileupload": "workspace:*",
     "@bastant/form": "workspace:*",
     "@bastant/i18n": "workspace:*",
     "@bastant/modal": "workspace:*",
     "@solidjs/router": "^0.8.3",
-    "barstil": "workspace:*",
     "solid-js": "^1.7.7"
   },
   "devDependencies": {

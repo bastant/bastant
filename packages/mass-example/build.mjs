@@ -1,4 +1,4 @@
-import { create } from "barstil";
+import { create } from "@bastant/barstil";
 
 create({
   path: "./config.json",
@@ -6,7 +6,7 @@ create({
   typescript: true,
   helpers: true,
   output: {
-    sass: "./styling/",
-    script: "./src/",
+    sass: "./src/styling/",
+    script: "./src/styling",
   },
 });

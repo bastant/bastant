@@ -5,6 +5,9 @@ import Path from "node:path";
 export const VAR_MAP: Record<string, string[]> = {
   //sizes: ['height', 'width', 'border-width'],
   spacings: ["padding", "margin"],
+  fontWeights: ["font-weight"],
+  fontSizes: ["font-size"],
+  colors: ["color", "background-color"],
 };
 
 function createSection(
@@ -24,7 +27,7 @@ function createSection(
   }
 
   const output = dedent`
-  $${section.cssName}-map: ${sass.join(", ")};
+  $${section.cssName}-map: (${sass.join(", ")});
   @function ${section.singular}($var) {
     @return barstil.variable($${section.cssName}-map, $var, ${
     section.singular
@@ -42,7 +45,10 @@ export async function create(sections: Section[], options: CreateOptions) {
   const files = [
     {
       name: options.path,
-      content: sections.map((section) => createSection(...section)).join("\n"),
+      content: dedent`
+      @use '@bastant/barstil';
+      ${sections.map((section) => createSection(...section)).join("\n")}
+      `,
     },
   ];
 
@@ -73,7 +79,7 @@ export async function create(sections: Section[], options: CreateOptions) {
 
     let diff = Path.relative(Path.dirname(options.classes), options.path);
 
-    classes.unshift(`@use "${diff}" show *;`, '@use "barstil";');
+    classes.unshift(`@use "${diff}" as *;`, '@use "@bastant/barstil";');
 
     files.push({
       name: options.classes!,
@@ -81,5 +87,5 @@ export async function create(sections: Section[], options: CreateOptions) {
     });
   }
 
-  console.log(files);
+  return files;
 }
