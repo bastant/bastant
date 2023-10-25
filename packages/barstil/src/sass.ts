@@ -8,6 +8,7 @@ export const VAR_MAP: Record<string, string[]> = {
   fontWeights: ["font-weight"],
   fontSizes: ["font-size"],
   colors: ["color", "background-color"],
+  //radii: ["border-radius"],
 };
 
 function createSection(
@@ -60,7 +61,7 @@ export async function create(sections: Section[], options: CreateOptions) {
         const props = VAR_MAP[section.name];
 
         return props.map((prop) => {
-          if (["padding", "margin"].includes(prop)) {
+          if (["padding", "margin", "border-radius"].includes(prop)) {
             return dedent`
           .${prop} {
             @include barstil.create-dir-prop($${section.cssName}-map, ${prop}, ${section.name});

@@ -1,5 +1,5 @@
 @use "_config.scss" as *;
-@use "barstil";
+@use "@bastant/barstil";
 .color {
   @include barstil.create-prop($colors-map, color, colors);
 }
