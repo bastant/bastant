@@ -1,6 +1,6 @@
 {
   "name": "@bastant/barstil",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "repository": "https://github.com/bastant/bastant",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
@@ -16,6 +16,7 @@
   },
   "files": [
     "lib/*.js",
+    "lib/*.d.ts",
     "*.scss"
   ],
   "main": "./lib/index.js",
