@@ -9,10 +9,10 @@ function callOrReturn<T>(value: T | (() => T)): T {
 
 export interface FormApi<T> {
   field<K extends keyof T>(name: K): FieldApi<T[K]>;
-  submit: (e?: SubmitEvent) => void;
+  submit: (e?: Event) => void;
   control<E extends HTMLElement>(el: E, accessor?: () => true): void;
   readonly values: Accessor<Partial<T>>;
-  reset: () => void;
+  reset: (e?: Event) => void;
   clear: () => void;
   validate: () => Promise<boolean>;
 
@@ -25,8 +25,8 @@ export interface FormApi<T> {
 }
 
 export interface FormOptions<T> {
-  defaultValues?: Partial<T> | Accessor<T | undefined>;
-  submit?: (value: Partial<T>) => Promise<void> | void;
+  defaultValues?: T | Accessor<T | undefined>;
+  submit?: (value: T) => Promise<void> | void;
   validations?: Partial<Record<keyof T, Validation[]>>;
   submitOnError?: Accessor<boolean> | boolean;
   validateOnInitial?: Accessor<boolean> | boolean;
@@ -61,7 +61,7 @@ export function createFormApi<T>(options: FormOptions<T> = {}): FormApi<T> {
     setState(
       "values",
       (typeof options.defaultValues == "function"
-        ? options.defaultValues()
+        ? (options.defaultValues as any)()
         : options.defaultValues) ?? {}
     );
     setState("dirty", false);
@@ -169,7 +169,7 @@ export function createFormApi<T>(options: FormOptions<T> = {}): FormApi<T> {
 
       setState("status", "submitting");
       try {
-        await options.submit?.(unwrap(state.values));
+        await options.submit?.(unwrap(state.values) as T);
         batch(() => {
           setState("status", "editing");
           setState("dirty", false);

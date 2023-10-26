@@ -13,7 +13,9 @@ export interface ListModel {
   id: string | number;
 }
 
-export type NewModel<T extends ListModel> = Omit<T, "id">;
+export type NewModel<T extends ListModel> = Omit<T, "id"> & {
+  id?: string | number;
+};
 
 export interface ListEntry<T extends ListModel> {
   id: string | number;
@@ -32,6 +34,7 @@ export interface ListState<T extends ListModel> {
   delete(id: string | number): void;
   items(): ListEntry<T>[];
   ops(): Op<T>[];
+  reset(): void;
 }
 
 type Operation<T extends ListModel> =
@@ -130,6 +133,9 @@ export function createListState<T extends ListModel>(
       } else {
         setOps((ops) => ops.filter((m) => m.id != id));
       }
+    },
+    reset() {
+      setOps([]);
     },
     items: outputItem,
     ops() {
