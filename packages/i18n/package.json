@@ -1,6 +1,6 @@
 {
   "name": "@bastant/i18n",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "type": "module",
   "files": [
     "dist"
@@ -37,6 +37,7 @@
     }
   },
   "peerDependencies": {
+    "i18next": "^23.4.4",
     "solid-js": "^1.7.7"
   },
   "scripts": {
@@ -45,16 +46,15 @@
     "prepublish": "rollup -c"
   },
   "devDependencies": {
+    "i18next": "^23.4.4",
     "rollup": "^3.28.0",
     "rollup-plugin-ts": "^3.4.4",
     "rollup-preset-solid": "^2.0.1",
     "rollup-ts": "^1.0.4",
-    "typescript": "^5.0.2",
-    "vite": "^4.4.2"
+    "typescript": "^5.0.2"
   },
   "dependencies": {
     "html-parse-string": "^0.0.9",
-    "i18next": "^23.4.4",
     "type-fest": "^4.3.2"
   }
 }
