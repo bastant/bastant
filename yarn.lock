@@ -1498,6 +1498,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@bastant/rollup-plugin@workspace:packages/rollup":
+  version: 0.0.0-use.local
+  resolution: "@bastant/rollup-plugin@workspace:packages/rollup"
+  languageName: unknown
+  linkType: soft
+
 "@esbuild/android-arm64@npm:0.18.20":
   version: 0.18.20
   resolution: "@esbuild/android-arm64@npm:0.18.20"
