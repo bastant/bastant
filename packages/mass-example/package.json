@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "watch": "vite dev",
+    "watch": "vite dev --host",
     "build": "tsc && vite build --base=/api-static/frontend/.",
     "preview": "vite preview",
     "build-styling": "node build.mjs"

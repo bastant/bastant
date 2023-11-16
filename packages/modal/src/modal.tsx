@@ -1,4 +1,4 @@
-import type { JSXElement, Component } from "solid-js";
+import type { JSXElement, Component, JSX } from "solid-js";
 import { Portal } from "solid-js/web";
 import {
   Show,
@@ -38,12 +38,6 @@ export function createModalApi(
       shouldShow(!!props.show);
     });
 
-    // const children = createMemo(() => {
-    //   return typeof props.children === "function"
-    //     ? props.children(() => shouldShow(false))
-    //     : props.children;
-    // });
-
     return (
       <Show when={show()}>
         <Portal mount={options.mount}>{props.children}</Portal>
@@ -65,12 +59,14 @@ export interface CreateModalOptions extends CreateModalApiOptions {
    * Overlay color
    * @default rgba(0,0,0,0.7)
    */
-  overlayColor?: string;
+  overlayStyle?: JSX.CSSProperties;
+  overlayClass?: string;
   overlayAnimation?: {
     enter: Keyframe[];
     leave: Keyframe[];
     delay?: number;
     duration: number;
+    easing?: string;
   };
   //
   dialogAnimation?: {
@@ -78,6 +74,7 @@ export interface CreateModalOptions extends CreateModalApiOptions {
     leave: Keyframe[];
     delay?: number;
     duration: number;
+    easing?: string;
   };
 }
 
@@ -85,7 +82,9 @@ export function createModal(options: CreateModalOptions = {}): ModalControl {
   const { Modal: InnerModal, ...api } = createModalApi(options);
 
   const {
-    overlayColor = "rgba(0,0,0,0.7)",
+    overlayStyle = {
+      ["background-color"]: "rgba(0,0,0,0.7)",
+    },
     overlayAnimation = {
       enter: [{ opacity: 1 }],
       leave: [{ opacity: 0 }],
@@ -101,29 +100,23 @@ export function createModal(options: CreateModalOptions = {}): ModalControl {
   const [show, shouldShow] = createSignal(false);
 
   const Modal = (props: ModalProps) => {
-    // const children = createMemo(() => {
-    //   console.log("INIT HER");
-    //   return typeof props.children === "function"
-    //     ? props.children(() => shouldShow(false))
-    //     : props.children;
-    // });
-
     return (
       <InnerModal {...props}>
-        <div style="width:100vw;height:100vh;top:0;left:0;position:fixed;">
+        <div style="width:100vw;height:100vh;height:100dvh;top:0;left:0;position:fixed;z-index:1">
           <DynamicShow
             show={show()}
             enter={overlayAnimation.enter}
             leave={overlayAnimation.leave}
-            duration={300}
+            duration={overlayAnimation.duration}
             delay={show() ? 0 : 100}
+            easing={overlayAnimation.easing}
             onLeave={() => {
               api.close();
             }}
             style={{
+              ...overlayStyle,
               inset: 0,
               position: "absolute",
-              "background-color": overlayColor,
             }}
           />
 
@@ -132,7 +125,8 @@ export function createModal(options: CreateModalOptions = {}): ModalControl {
               show={show()}
               enter={dialogAnimation.enter}
               leave={dialogAnimation.leave}
-              duration={200}
+              easing={dialogAnimation.easing}
+              duration={dialogAnimation.duration}
               delay={show() ? 100 : 0}
             >
               {props.children}

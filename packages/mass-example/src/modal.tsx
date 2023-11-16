@@ -24,7 +24,7 @@ export default function ModalPage() {
       </button>
       <Modal>
         <div
-          style="height:4400px;width:400px;background:white;margin:10px auto;"
+          style="height:4400px;width:400px;max-width:100%;background:white;margin:10px auto;"
           use:clickOutside={() => {
             console.log("click");
             api.close();

@@ -85,6 +85,7 @@ export type DynamicShowProps<A extends keyof JSX.HTMLElementTags> =
     leave: Keyframe[];
     duration?: number;
     delay?: number;
+    easing?: string;
     show?: boolean;
     onLeave?: () => void;
     onEnter?: () => void;
@@ -102,28 +103,29 @@ export function DynamicShow<A extends keyof JSX.HTMLElementTags = "div">(
     "delay",
     "onLeave",
     "onEnter",
+    "easing",
   ]);
 
   return (
     <Reveal
       enter={(el) =>
-        el.animate([...local.leave, ...props.enter], {
+        el.animate([...local.leave, ...local.enter], {
           fill: "both",
-          duration: props.duration,
-          delay: props.delay,
+          duration: local.duration,
+          delay: local.delay,
         })
       }
       leave={(el) =>
-        el.animate([...props.enter, ...props.leave], {
-          duration: props.duration,
-          delay: props.delay,
+        el.animate([...local.enter, ...local.leave], {
+          duration: local.duration,
+          delay: local.delay,
         })
       }
       onLeave={local.onLeave ? () => local.onLeave?.() : void 0}
       onEnter={local.onEnter ? () => local.onEnter?.() : void 0}
     >
       <SolidShow when={local.show}>
-        <Dynamic component={props.as ?? "div"} {...(rest as any)} />
+        <Dynamic component={local.as ?? "div"} {...(rest as any)} />
       </SolidShow>
     </Reveal>
   );
