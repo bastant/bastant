@@ -37,3 +37,11 @@ const _has = Object.prototype.hasOwnProperty;
 export function has(item: unknown, prop: string | number | symbol): boolean {
   return _has.call(item, prop);
 }
+
+export function toError(err: unknown): Error {
+  if (err instanceof Error) {
+    return err;
+  } else {
+    return new Error(String(err));
+  }
+}

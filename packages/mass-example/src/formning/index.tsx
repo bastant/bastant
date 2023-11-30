@@ -24,6 +24,10 @@ export default function Page() {
     submitOnError: () => settings()?.submitOnError ?? false,
     validateEvent: () => settings()?.validateEvent ?? "change",
     submit(value) {
+      if (settings()?.triggerSubmitError) {
+        throw "Hey, mand";
+      }
+
       console.log("value", value);
     },
   });
@@ -35,12 +39,11 @@ export default function Page() {
     <div>
       <FormSettingsForm onChange={setSettings} />
       <FormState form={api} />
-
+      <Show when={api.submitError()}>
+        <div>{api.submitError()?.message}</div>
+      </Show>
       <button onClick={api.clearErrors}>Clear errors</button>
-      <div>
-        <div>Form State: {api.status()}</div>
-        <div>Dirty: {api.isDirty() ? t("yes") : t("no")}</div>
-      </div>
+
       <form onSubmit={api.submit}>
         <Field field={name} label={t("name.label", "Name")}>
           <input ref={name.control} />
