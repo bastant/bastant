@@ -1,4 +1,4 @@
-import { ValidationEvent, createFormApi } from "@bastant/form";
+import { ValidationEvent, createFormApi, v2 } from "@bastant/form";
 import { createRenderEffect } from "solid-js";
 
 export interface Settings {
@@ -13,7 +13,7 @@ export interface FormSettingsFormProps {
 }
 
 export function FormSettingsForm(props: FormSettingsFormProps) {
-  const { control, ...api } = createFormApi<Settings>({
+  const { control, ...api } = v2.createForm<Settings>({
     defaultValues: {
       submitOnError: false,
       validateOnMount: false,

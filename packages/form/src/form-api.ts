@@ -3,6 +3,7 @@ import { Validation } from "./validate.js";
 import { type Accessor, createComputed, batch, untrack } from "solid-js";
 import { FieldApi, createControl, createField, validate } from "./field.jsx";
 import { toError } from "./util.js";
+import { ValueOf } from "type-fest";
 
 function callOrReturn<T>(value: T | (() => T)): T {
   return typeof value === "function" ? (value as any)() : value;
@@ -45,6 +46,7 @@ interface FormStore<T> {
   values: Partial<T>;
   status: Status;
   dirty: boolean;
+  fields: Partial<Record<keyof T, ValueOf<T>>>;
 }
 
 export type Status = "editing" | "submitting" | "validating" | "failed";
@@ -56,21 +58,24 @@ export function createFormApi<T>(options: FormOptions<T> = {}): FormApi<T> {
     submitError: void 0,
     status: "editing",
     dirty: false,
+    fields: {},
   });
 
   const hasErrors = () =>
     Object.values(state.validationErrors).some((m) => (m as string[])?.length);
 
   const reset = () => {
-    setState((old) => ({
-      ...old,
-      dirty: false,
-      values: {
-        ...((typeof options.defaultValues == "function"
-          ? untrack(options.defaultValues as any)
-          : options.defaultValues) ?? {}),
-      },
-    }));
+    batch(() => {
+      setState(
+        "values",
+        (typeof options.defaultValues == "function"
+          ? (options.defaultValues as any)()
+          : options.defaultValues) ?? {}
+      );
+      setState("dirty", false);
+      setState("submitError", void 0);
+      setState("validationErrors", {});
+    });
   };
 
   const setValue = <K extends keyof T>(key: K, value: T[K] | undefined) => {
@@ -87,7 +92,10 @@ export function createFormApi<T>(options: FormOptions<T> = {}): FormApi<T> {
   };
 
   function field<K extends keyof T>(name: K): FieldApi<T[K]> {
-    return createField({
+    const found = untrack(() => state.fields)[name];
+    if (found) return found as unknown as FieldApi<T[K]>;
+
+    const field = createField({
       validationEvent: () => callOrReturn(options.validateEvent) ?? "submit",
       value: () => state.values[name],
       setValue(value) {
@@ -100,6 +108,10 @@ export function createFormApi<T>(options: FormOptions<T> = {}): FormApi<T> {
         return state.validationErrors[name];
       },
     }) as FieldApi<T[K]>;
+
+    setState("fields", (fields) => ({ ...fields, [name]: field }));
+
+    return field;
   }
 
   createComputed(reset);
