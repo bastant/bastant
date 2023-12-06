@@ -1,6 +1,6 @@
 import { createStore, unwrap } from "solid-js/store";
 import { Validation } from "./validate.js";
-import { type Accessor, createComputed, batch } from "solid-js";
+import { type Accessor, createComputed, batch, untrack } from "solid-js";
 import { FieldApi, createControl, createField, validate } from "./field.jsx";
 import { toError } from "./util.js";
 
@@ -62,15 +62,15 @@ export function createFormApi<T>(options: FormOptions<T> = {}): FormApi<T> {
     Object.values(state.validationErrors).some((m) => (m as string[])?.length);
 
   const reset = () => {
-    batch(() => {
-      setState(
-        "values",
-        (typeof options.defaultValues == "function"
-          ? (options.defaultValues as any)()
-          : options.defaultValues) ?? {}
-      );
-      setState("dirty", false);
-    });
+    setState((old) => ({
+      ...old,
+      dirty: false,
+      values: {
+        ...((typeof options.defaultValues == "function"
+          ? untrack(options.defaultValues as any)
+          : options.defaultValues) ?? {}),
+      },
+    }));
   };
 
   const setValue = <K extends keyof T>(key: K, value: T[K] | undefined) => {
@@ -120,7 +120,7 @@ export function createFormApi<T>(options: FormOptions<T> = {}): FormApi<T> {
       setState("status", "validating");
     }
 
-    const validators = options.validations?.[name] ?? [];
+    const validators = callOrReturn(options.validations)?.[name] ?? [];
     const errors = await validate(
       name as string,
       validators,
@@ -137,7 +137,7 @@ export function createFormApi<T>(options: FormOptions<T> = {}): FormApi<T> {
   async function validateFn() {
     setState("status", "validating");
     const promises: Promise<void>[] = [];
-    for (const field in options.validations) {
+    for (const field in callOrReturn(options.validations)) {
       promises.push(validateField(field, false));
     }
 

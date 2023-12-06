@@ -1432,6 +1432,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@bastant/fileupload@workspace:packages/fileupload"
   dependencies:
+    "@bastant/form": "workspace:^"
     glob: ^10.3.4
     mkdirp: ^3.0.1
     rollup: ^3.28.0
@@ -1443,11 +1444,12 @@ __metadata:
     typescript: ^5.0.2
     vite: ^4.4.2
   peerDependencies:
+    "@bastant/form": "workspace:^"
     solid-js: ^1.7.7
   languageName: unknown
   linkType: soft
 
-"@bastant/form@workspace:*, @bastant/form@workspace:packages/form":
+"@bastant/form@workspace:*, @bastant/form@workspace:^, @bastant/form@workspace:packages/form":
   version: 0.0.0-use.local
   resolution: "@bastant/form@workspace:packages/form"
   dependencies:
@@ -1495,12 +1497,6 @@ __metadata:
   peerDependencies:
     "@bastant/base": "workspace:^"
     solid-js: ^1.7.7
-  languageName: unknown
-  linkType: soft
-
-"@bastant/rollup-plugin@workspace:packages/rollup":
-  version: 0.0.0-use.local
-  resolution: "@bastant/rollup-plugin@workspace:packages/rollup"
   languageName: unknown
   linkType: soft
 

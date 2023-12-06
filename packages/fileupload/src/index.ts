@@ -3,3 +3,4 @@ export * from "./upload-button.jsx";
 export * from "./manager.js";
 export * from "./preview.jsx";
 export * from "./slots.jsx";
+export { file, blob, mime } from "./util.js";

@@ -1,5 +1,5 @@
 @use '@bastant/barstil';
-    $colors-map: ("background": #fff);
+    $colors-map: ("background": #fff, "primary": red);
 @function color($var) {
 @return barstil.variable($colors-map, $var, color);
 }

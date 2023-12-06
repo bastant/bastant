@@ -13,7 +13,7 @@ export interface ListModel {
   id: string | number;
 }
 
-export type NewModel<T extends ListModel> = Omit<T, "id"> & {
+export type NewModel<T> = Omit<T, "id"> & {
   id?: string | number;
 };
 
@@ -23,7 +23,7 @@ export interface ListEntry<T extends ListModel> {
   isPersistent: boolean;
 }
 
-export type Op<T extends ListModel> =
+export type Op<T> =
   | { type: "create"; value: NewModel<T> }
   | { type: "update"; id: string | number; value: NewModel<T> }
   | { type: "delete"; id: string | number };

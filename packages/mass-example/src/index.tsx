@@ -16,26 +16,36 @@ import { Reveal } from "@bastant/base";
 
 import { margin } from "./styling/helpers.js";
 
+import "./app.scss";
+
 function App() {
   return (
     <Router>
       <Fixed keyPrefix="nav">
-        <ul classList={margin({ m: "normal" })}>
-          <li>
-            <A href="/form">
-              <Trans key="form">Forms</Trans>
-            </A>
-          </li>
-          <li>
-            <A href="/list-state">List State</A>
-          </li>
-          <li>
-            <A href="/utils">Util</A>
-          </li>
-          <li>
-            <A href="/modals">Modals</A>
-          </li>
-        </ul>
+        <nav>
+          <ul classList={margin({ m: "normal" })}>
+            <li>
+              <A href="/form" activeClass="active">
+                <Trans key="form">Forms</Trans>
+              </A>
+            </li>
+            <li>
+              <A href="/list-state" activeClass="active">
+                List State
+              </A>
+            </li>
+            <li>
+              <A href="/utils" activeClass="active">
+                Util
+              </A>
+            </li>
+            <li>
+              <A href="/modals" activeClass="active">
+                Modals
+              </A>
+            </li>
+          </ul>
+        </nav>
       </Fixed>
 
       <Reveal
@@ -77,18 +87,23 @@ function App() {
           )
         }
       >
-        <Routes>
-          <Route
-            path="/form"
-            component={lazy(() => import("./formning/index.jsx"))}
-          />
-          <Route
-            path="/list-state"
-            component={lazy(() => import("./list-state.js"))}
-          />
-          <Route path="/utils" component={lazy(() => import("./utils.js"))} />
-          <Route path="/modals" component={lazy(() => import("./modal.js"))} />
-        </Routes>
+        <main>
+          <Routes>
+            <Route
+              path="/form"
+              component={lazy(() => import("./formning/index.jsx"))}
+            />
+            <Route
+              path="/list-state"
+              component={lazy(() => import("./list-state.js"))}
+            />
+            <Route path="/utils" component={lazy(() => import("./utils.js"))} />
+            <Route
+              path="/modals"
+              component={lazy(() => import("./modal.js"))}
+            />
+          </Routes>
+        </main>
       </Reveal>
     </Router>
   );

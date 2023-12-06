@@ -28,6 +28,8 @@ function getNumber(value: unknown): number {
     return value;
   } else if (Array.isArray(value)) {
     return value.length;
+  } else if (value instanceof Blob) {
+    return value.size;
   } else {
     return Object.keys(value as any).length;
   }
