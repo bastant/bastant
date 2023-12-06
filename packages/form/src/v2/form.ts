@@ -1,11 +1,13 @@
-import { Accessor, batch, createComputed, onMount, untrack } from "solid-js";
+import { Accessor, batch, createComputed, untrack } from "solid-js";
 import { Validation } from "../validate.js";
 import { SetStoreFunction, createStore } from "solid-js/store";
-import { Field, FieldApi } from "./field.jsx";
+import { Field, FieldApi } from "./field.js";
 import { toError } from "../util.js";
-import { createControl } from "./control.jsx";
+import { createControl } from "./control.js";
 
 export type Status = "editing" | "submitting" | "validating" | "failed";
+
+export type ValidationEvent = "input" | "blur" | "submit";
 
 interface FormState<T> {
   values: Partial<T>;
@@ -18,9 +20,12 @@ interface FormState<T> {
 
 export interface FormOptions<T> {
   defaultValues?: T | Accessor<T | undefined>;
-  validations?: Partial<Record<keyof T, Validation[]>>;
-  validationEvent?: "input" | "blur" | "submit";
-  submit?: (value: T) => Promise<void>;
+  validations?:
+    | Partial<Record<keyof T, Validation[]>>
+    | Accessor<Partial<Record<keyof T, Validation[]>>>;
+  validationEvent?: ValidationEvent | Accessor<ValidationEvent>;
+  submit?: (value: T) => Promise<void> | void;
+  submitOnError?: boolean | Accessor<boolean>;
 }
 
 export interface FormApi<T> {
@@ -34,6 +39,7 @@ export interface FormApi<T> {
 
   isSubmitting: Accessor<boolean>;
   isDirty: Accessor<boolean>;
+  isValid: Accessor<boolean>;
   clearErrors(): void;
   submitError: () => Error | undefined;
 }
@@ -55,7 +61,7 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
   const reset = () => {
     setState((state) => ({
       ...state,
-      values: callOrReturn(options.defaultValues),
+      values: callOrReturn(options.defaultValues) ?? {},
       dirty: false,
       validationErrors: {},
       submitError: void 0,
@@ -65,6 +71,18 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
 
   createComputed(reset);
 
+  const isValid = () => {
+    return !state.submitError && !Object.keys(state.validationErrors).length;
+  };
+
+  const validate = async () => {
+    for (const name in state.fields) {
+      await state.fields[name]?.validate();
+    }
+
+    return !!Object.keys(state.validationErrors).length;
+  };
+
   return {
     isSubmitting() {
       return state.status === "submitting";
@@ -72,14 +90,17 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
     isDirty() {
       return state.dirty;
     },
+    isValid,
     submitError() {
       return state.submitError;
     },
     clearErrors() {
-      batch(() => {
-        setState("submitError", void 0);
-        setState("validationErrors", {});
-      });
+      setState((old) => ({
+        ...old,
+        validationErrors: {},
+        submitError: void 0,
+        status: "editing",
+      }));
     },
     field<K extends keyof T>(name: K) {
       const field = createField(
@@ -106,13 +127,7 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
       }));
     },
     reset,
-    async validate() {
-      for (const name in state.fields) {
-        await state.fields[name]?.validate();
-      }
-
-      return !!Object.keys(state.validationErrors).length;
-    },
+    validate,
     control<E extends HTMLElement>(el: E) {
       const name = el.getAttribute("name") as keyof T;
       if (!name) {
@@ -124,7 +139,7 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
         name,
         state,
         setState,
-        options.validations ?? {},
+        options.validations,
         options.validationEvent as any
       ).api();
 
@@ -133,10 +148,12 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
     async submit(e?: Event) {
       e?.preventDefault();
 
-      if (options.validationEvent == "submit") {
-        if (!(await this.validate())) {
-          return;
-        }
+      if (callOrReturn(options.validationEvent) == "submit") {
+        await validate();
+      }
+
+      if (!callOrReturn(options.submitOnError) && !isValid()) {
+        return;
       }
 
       const con = (
@@ -144,14 +161,14 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
           Object.values(state.fields).map((m: any) => m.beforeSubmit())
         )
       ).reduce((p, c) => {
-        p | c;
+        return p | c;
       }, 0);
 
       if (!con) return;
 
       setState("status", "submitting");
       try {
-        await Promise.resolve(options.submit?.(untrack(this.values) as T));
+        await Promise.resolve(options.submit?.(state.values as T));
         batch(() => {
           setState("status", "editing");
           setState("dirty", false);
@@ -168,8 +185,10 @@ function createField<K extends keyof T, T>(
   name: K,
   state: FormState<T>,
   setState: SetStoreFunction<FormState<T>>,
-  validations: Partial<Record<keyof T, Validation[]>>,
-  validationEvent?: "input" | "blur"
+  validations?:
+    | Partial<Record<keyof T, Validation[]>>
+    | Accessor<Partial<Record<keyof T, Validation[]>>>,
+  validationEvent?: "input" | "blur" | Accessor<"input" | "blur" | undefined>
 ) {
   const found = state.fields[name];
   if (found) return found;
@@ -193,8 +212,10 @@ function createField<K extends keyof T, T>(
         setState("validationErrors", name as any, errors as any);
       },
     },
-    validations[name] ?? [],
-    validationEvent
+    () =>
+      (callOrReturn(validations) ??
+        ({} as Partial<Record<keyof T, Validation[]>>))[name] ?? [],
+    () => callOrReturn(validationEvent)
   );
 
   setState("fields", name as any, field as any);

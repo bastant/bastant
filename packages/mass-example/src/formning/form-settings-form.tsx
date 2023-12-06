@@ -5,7 +5,7 @@ export interface Settings {
   submitOnError: boolean;
   validateOnMount: boolean;
   triggerSubmitError: boolean;
-  validateEvent: ValidationEvent;
+  validateEvent: v2.ValidationEvent;
 }
 
 export interface FormSettingsFormProps {
@@ -51,7 +51,7 @@ export function FormSettingsForm(props: FormSettingsFormProps) {
         <label>Validation event</label>
         <select use:control name="validateEvent">
           <option value="submit">Submit</option>
-          <option value="change">Change</option>
+          <option value="blur">Blur</option>
           <option value="input">Input</option>
         </select>
       </div>

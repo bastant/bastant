@@ -8,6 +8,7 @@ import {
   min,
   required,
   FormState,
+  v2,
 } from "@bastant/form";
 import { Trans, useFixedTFunc } from "@bastant/i18n";
 
@@ -16,13 +17,13 @@ export default function Page() {
 
   const t = useFixedTFunc(null, () => "formning");
 
-  const api = createFormApi<{ name: string; age: number }>({
+  const api = v2.createForm<{ name: string; age: number }>({
     validations: {
       name: [required(), min(2), max(100)],
       age: [required(), min(18), max(150)],
     },
     submitOnError: () => settings()?.submitOnError ?? false,
-    validateEvent: () => settings()?.validateEvent ?? "change",
+    validationEvent: () => settings()?.validateEvent ?? "input",
     submit(value) {
       if (settings()?.triggerSubmitError) {
         throw "Hey, mand";
@@ -38,7 +39,7 @@ export default function Page() {
   return (
     <div>
       <FormSettingsForm onChange={setSettings} />
-      <FormState form={api} />
+      {/* <FormState form={api} /> */}
       <Show when={api.submitError()}>
         <div>{api.submitError()?.message}</div>
       </Show>
@@ -54,13 +55,16 @@ export default function Page() {
         <button type="submit">
           <Trans key="submit">Submit</Trans>
         </button>
+        <button type="reset">
+          <Trans key="reset">Reset</Trans>
+        </button>
       </form>
     </div>
   );
 }
 
 export interface FieldProps<T> {
-  field?: FieldApi<T>;
+  field?: v2.FieldApi<T>;
   label?: string;
 }
 

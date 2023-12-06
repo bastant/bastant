@@ -1,6 +1,6 @@
 import { Accessor, onCleanup, onMount, untrack } from "solid-js";
-import { Validation } from "../validate";
-import { createControl } from "./control";
+import { Validation } from "../validate.js";
+import { createControl } from "./control.js";
 
 const $FieldProperty = Symbol("$FieldProperty");
 
@@ -17,22 +17,22 @@ export interface FieldApi<T> {
   setValue(value?: T): void;
   touch(): void;
   errors(): string[] | undefined;
-  //   control<E extends HTMLElement>(el: E, accessor?: () => true): void;
+  control<E extends HTMLElement>(el: E, accessor?: () => true): void;
 }
 
 export class Field<K extends keyof T, T> {
   #channel: Channel<K, T>;
-  #validations: Validation[];
+  #validations: Accessor<Validation[]>;
   #name: K;
-  #validationEvent?: "input" | "blur";
+  #validationEvent: Accessor<"input" | "blur" | undefined>;
 
   #hooks: ((value?: T[K]) => Promise<boolean> | boolean)[] = [];
 
   constructor(
     name: K,
     channel: Channel<K, T>,
-    validators: Validation[],
-    validationEvent?: "input" | "blur"
+    validators: Accessor<Validation[]>,
+    validationEvent: Accessor<"input" | "blur" | undefined>
   ) {
     this.#channel = channel;
     this.#validations = validators;
@@ -48,6 +48,10 @@ export class Field<K extends keyof T, T> {
   }
 
   async beforeSubmit(): Promise<boolean> {
+    if (this.#hooks.length == 0) {
+      return true;
+    }
+
     let ok = 0;
     for (const hook of this.#hooks) {
       ok |= (await Promise.resolve(
@@ -60,7 +64,7 @@ export class Field<K extends keyof T, T> {
 
   async validate() {
     const errors = await Promise.all(
-      this.#validations.map(async (m) => {
+      untrack(this.#validations).map(async (m) => {
         if (await Promise.resolve(m.validate(this.#channel.value()))) {
           return null;
         } else {
@@ -75,28 +79,34 @@ export class Field<K extends keyof T, T> {
   }
 
   api(): FieldApi<T[K]> {
+    const setValue = (value: T[K] | undefined) => {
+      const event = this.#validationEvent();
+
+      if (event == "input") {
+        const oldValue = untrack(this.#channel.value);
+        if (oldValue == value) {
+          return;
+        }
+      }
+      this.#channel.setValue(value);
+      if (event === "input") {
+        this.validate();
+      }
+    };
+
+    const touch = () => {
+      const event = this.#validationEvent();
+      if (event === "blur") {
+        this.validate();
+      }
+    };
+
     return {
       [$FieldProperty]: this as any,
       value: this.#channel.value,
-      setValue: (value) => {
-        const event = this.#validationEvent;
-
-        if (event == "input") {
-          const oldValue = untrack(this.#channel.value);
-          if (oldValue == value) {
-            return;
-          }
-        }
-        this.#channel.setValue(value);
-        if (event === "input") {
-          this.validate();
-        }
-      },
-      touch: () => {
-        if (this.#validationEvent === "blur") {
-          this.validate();
-        }
-      },
+      setValue,
+      control: createControl(this.#channel.value, setValue, touch),
+      touch,
       errors: this.#channel.errors,
     };
   }

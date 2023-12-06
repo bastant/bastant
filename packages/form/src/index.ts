@@ -22,4 +22,4 @@ declare module "solid-js" {
   }
 }
 
-export * as v2 from "./v2/form.jsx";
+export * as v2 from "./v2/index.js";
