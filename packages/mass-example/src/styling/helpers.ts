@@ -4,6 +4,7 @@ export type Color = keyof typeof COLORS
 export function color(opts: Color) {
   switch (opts) {
     case "background": return css["color-background"];
+case "primary": return css["color-primary"];
     default: return void 0
   }
 }
@@ -11,6 +12,7 @@ export type BackgroundColor = keyof typeof COLORS
 export function backgroundColor(opts: BackgroundColor) {
   switch (opts) {
     case "background": return css["background-color-background"];
+case "primary": return css["background-color-primary"];
     default: return void 0
   }
 }

@@ -30,7 +30,7 @@ export interface FormOptions<T> {
 
 export interface FormApi<T> {
   field<K extends keyof T>(name: K): FieldApi<T[K]>;
-  values(): Partial<T>;
+  values: Accessor<Partial<T>>;
   submit(e?: Event): void;
   clear(): void;
   reset(): void;
@@ -202,7 +202,7 @@ function createField<K extends keyof T, T>(
           setState("values", name as any, value as any);
           const vEvent = callOrReturn(validationEvent);
 
-          if (vEvent == "input" || vEvent == "submit") {
+          if (vEvent == "submit") {
             setState("validationErrors", name as any, [] as any);
           }
         });

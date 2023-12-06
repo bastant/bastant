@@ -1,0 +1,36 @@
+@use "@bastant/barstil";
+@use "./styling/config" as cfg;
+
+@include barstil.reset();
+
+main {
+  width: 1200px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+nav {
+  ul {
+    display: flex;
+    gap: cfg.spacing(small);
+    a {
+      color: cfg.color(primary);
+      &.active {
+        color: black;
+      }
+    }
+  }
+}
+
+button {
+  border: 1px solid gray;
+  padding: cfg.spacing(mini) cfg.spacing(small);
+  border-radius: 5px;
+}
+
+select {
+  border: 1px solid gray;
+  padding: cfg.spacing(mini) cfg.spacing(small);
+  border-radius: 5px;
+  width: 200px;
+}

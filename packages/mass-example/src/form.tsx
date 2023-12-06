@@ -44,7 +44,7 @@ export default function Page() {
 
 function Field() {
   const api = createField<string>({
-    validateEvent: "input",
+    validateEvent: () => "input",
     validators: [required()],
   });
 

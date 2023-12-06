@@ -1,4 +1,4 @@
-export const COLORS = {"background":"#fff"}  as const;
+export const COLORS = {"background":"#fff","primary":"red"}  as const;
 export function colors(variable : keyof typeof COLORS) : string | undefined {
     const found = COLORS[variable];
     return found ? "var(--color-" + variable + "," + found + ")" : void 0;

@@ -1,7 +1,11 @@
-import { createComputed, createMemo, createSignal } from "solid-js";
+import { FieldApi } from "@bastant/form";
+import {
+  createComputed,
+  createEffect,
+  createMemo,
+  createSignal,
+} from "solid-js";
 import type { JSX } from "solid-js";
-
-import css from "./upload-button.module.scss";
 
 export interface UploadButtonProps {
   accept?: string[];
@@ -10,6 +14,7 @@ export interface UploadButtonProps {
   onChange?: (file: File | undefined) => void;
   value?: File;
   children?: ((file: File | undefined) => JSX.Element) | JSX.Element;
+  field?: FieldApi<File>;
 }
 
 export function UploadButton(props: UploadButtonProps) {
@@ -31,11 +36,18 @@ export function UploadButton(props: UploadButtonProps) {
     if (inputRef) inputRef.files = target.files;
   });
 
+  createEffect(() => {
+    if (!props.field || !inputRef) {
+      return;
+    }
+
+    const value = props.field!.value();
+    if (value) {
+    }
+  });
+
   return (
-    <label
-      class={`${css["upload-button"]} ${props.class ?? ""}`}
-      style={props.style}
-    >
+    <label class={props.class} style={props.style}>
       <input
         ref={inputRef}
         type="file"
@@ -44,6 +56,7 @@ export function UploadButton(props: UploadButtonProps) {
           const file = e.currentTarget.files?.item(0) ?? void 0;
           setFile(file);
           props.onChange?.(file);
+          props.field?.setValue(file);
         }}
       />
       {typeof props.children == "function"

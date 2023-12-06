@@ -1,8 +1,10 @@
-import { Accessor, createComputed } from "solid-js";
+import { Accessor, createComputed, createUniqueId } from "solid-js";
 import { createStore, produce } from "solid-js/store";
+import { Id, ListState, Op, createListState } from "@bastant/form";
 
 export interface ManagedFile {
   toFile(): File;
+  name(): string;
   url(): string;
 }
 
@@ -10,6 +12,10 @@ export class LocalFile implements ManagedFile {
   #file: File;
   constructor(file: File) {
     this.#file = file;
+  }
+
+  name() {
+    return this.#file.name;
   }
 
   toFile() {
@@ -29,22 +35,37 @@ interface Store {
   files: ManagedFile[];
 }
 
-export function createFileManager(options?: FileManagerOptions) {
-  const [state, setState] = createStore<Store>({
-    files: [],
-  });
+export interface FileManangerApi {
+  files: Accessor<ManagedFile>;
+  push(file: ManagedFile): Id;
+  ops(): Accessor<Op<ManagedFile>>;
+}
 
-  createComputed(() => {
-    setState("files", () => options?.files?.() ?? []);
-  });
+export function createFileManager(options?: FileManagerOptions) {
+  const state = createListState<{ id: string; item: ManagedFile }>(
+    () =>
+      options?.files?.().map((m) => ({
+        id: createUniqueId(),
+        item: m,
+      })) ?? []
+  );
 
   return {
-    files: () => state.files,
+    files: () => state.items().map((m) => m.value),
     push: (file: ManagedFile) => {
-      setState(produce((s) => s.files.push(file)));
+      return state.create({ id: createUniqueId(), item: file });
     },
-    clear() {
-      setState("files", []);
+    delete: (id: Id) => {
+      state.delete(id);
+    },
+    ops: () => {
+      return state.ops().map((m) => ({
+        ...m,
+        value: (m as any).value?.item,
+      }));
+    },
+    reset() {
+      state.reset();
       return this;
     },
   };

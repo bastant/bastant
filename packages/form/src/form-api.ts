@@ -132,7 +132,7 @@ export function createFormApi<T>(options: FormOptions<T> = {}): FormApi<T> {
       setState("status", "validating");
     }
 
-    const validators = options.validations?.[name] ?? [];
+    const validators = callOrReturn(options.validations)?.[name] ?? [];
     const errors = await validate(
       name as string,
       validators,
@@ -149,7 +149,7 @@ export function createFormApi<T>(options: FormOptions<T> = {}): FormApi<T> {
   async function validateFn() {
     setState("status", "validating");
     const promises: Promise<void>[] = [];
-    for (const field in options.validations) {
+    for (const field in callOrReturn(options.validations)) {
       promises.push(validateField(field, false));
     }
 
