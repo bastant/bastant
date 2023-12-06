@@ -39,6 +39,8 @@ export default function Page() {
     },
     submitOnError: () => settings()?.submitOnError ?? false,
     validationEvent: () => settings()?.validateEvent ?? "input",
+    resetOnDefaultValueChange: () =>
+      settings()?.resetOnDefaultValueChange ?? false,
     submit(value) {
       if (settings()?.triggerSubmitError) {
         throw "Hey, mand";

@@ -14,6 +14,7 @@ export function FormState<T>(props: FormStateProps<T>) {
           <div>
             <span>{props.form?.status()}</span>
             {props.form?.isDirty() && <span>dirty</span>}
+            <span>Valid {props.form?.isValid() ? "true" : "false"}</span>
           </div>
           <code>
             <pre>{JSON.stringify(props.form?.values(), null, 2)}</pre>

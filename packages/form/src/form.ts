@@ -26,6 +26,7 @@ export interface FormOptions<T> {
   validationEvent?: ValidationEvent | Accessor<ValidationEvent>;
   submit?: (value: T) => Promise<void> | void;
   submitOnError?: boolean | Accessor<boolean>;
+  resetOnDefaultValueChange?: boolean | Accessor<boolean>;
 }
 
 export interface FormApi<T> {
@@ -42,11 +43,15 @@ export interface FormApi<T> {
   isDirty: Accessor<boolean>;
   isValid: Accessor<boolean>;
   clearErrors(): void;
-  submitError: () => Error | undefined;
+  submitError: Accessor<Error | undefined>;
 }
 
-function callOrReturn<T>(value: T | (() => T)): T {
-  return typeof value === "function" ? untrack(value as () => T) : value;
+function callOrReturn<T>(value: T | (() => T), track = false): T {
+  return typeof value === "function"
+    ? track
+      ? (value as () => T)()
+      : untrack(value as () => T)
+    : value;
 }
 
 export function createForm<T>(options: FormOptions<T>): FormApi<T> {
@@ -60,9 +65,13 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
   });
 
   const reset = () => {
+    const track = callOrReturn(
+      options.resetOnDefaultValueChange ?? false,
+      true
+    );
     setState((state) => ({
       ...state,
-      values: callOrReturn(options.defaultValues) ?? {},
+      values: callOrReturn(options.defaultValues, track) ?? {},
       dirty: false,
       validationErrors: {},
       submitError: void 0,
@@ -73,7 +82,10 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
   createComputed(reset);
 
   const isValid = () => {
-    return !state.submitError && !Object.keys(state.validationErrors).length;
+    return (
+      !state.submitError &&
+      !Object.values(state.validationErrors).some((m) => (m as any).length)
+    );
   };
 
   const validate = async () => {
@@ -81,7 +93,7 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
       await state.fields[name]?.validate();
     }
 
-    return !!Object.keys(state.validationErrors).length;
+    return untrack(isValid);
   };
 
   return {

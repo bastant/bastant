@@ -6,6 +6,7 @@ export interface Settings {
   validateOnMount: boolean;
   triggerSubmitError: boolean;
   validateEvent: ValidationEvent;
+  resetOnDefaultValueChange: boolean;
 }
 
 export interface FormSettingsFormProps {
@@ -19,6 +20,7 @@ export function FormSettingsForm(props: FormSettingsFormProps) {
       validateOnMount: false,
       triggerSubmitError: false,
       validateEvent: "submit",
+      resetOnDefaultValueChange: false,
     },
   });
 
@@ -39,6 +41,12 @@ export function FormSettingsForm(props: FormSettingsFormProps) {
         <label>
           <input use:control type="checkbox" name="validateOnMount" />
           Validate on mount
+        </label>
+      </div>
+      <div>
+        <label>
+          <input use:control type="checkbox" name="resetOnDefaultValueChange" />
+          Reset form when default values changes
         </label>
       </div>
       <div>
