@@ -12,10 +12,10 @@
   "dependencies": {
     "@bastant/barstil": "workspace:*",
     "@bastant/base": "workspace:*",
-    "@bastant/fileupload": "workspace:*",
     "@bastant/form": "workspace:*",
     "@bastant/i18n": "workspace:*",
     "@bastant/modal": "workspace:*",
+    "@bastant/upload": "workspace:*",
     "@solidjs/router": "^0.8.3",
     "solid-js": "^1.7.7"
   },

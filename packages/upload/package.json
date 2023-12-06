@@ -1,5 +1,5 @@
 {
-  "name": "@bastant/fileupload",
+  "name": "@bastant/upload",
   "version": "0.1.0",
   "type": "module",
   "files": [

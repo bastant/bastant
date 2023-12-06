@@ -18,7 +18,7 @@ import {
 } from "@bastant/form";
 import { Trans, useFixedTFunc } from "@bastant/i18n";
 import { DynamicShow } from "@bastant/base";
-import { FileInput, UploadButton, file, mime } from "@bastant/fileupload";
+import { FileInput, UploadButton, file, mime } from "@bastant/upload";
 
 export default function Page() {
   const [settings, setSettings] = createSignal<Settings>();

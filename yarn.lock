@@ -1428,27 +1428,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@bastant/fileupload@workspace:*, @bastant/fileupload@workspace:packages/fileupload":
-  version: 0.0.0-use.local
-  resolution: "@bastant/fileupload@workspace:packages/fileupload"
-  dependencies:
-    "@bastant/form": "workspace:^"
-    glob: ^10.3.4
-    mkdirp: ^3.0.1
-    rollup: ^3.28.0
-    rollup-plugin-styles: ^4.0.0
-    rollup-plugin-ts: ^3.4.4
-    rollup-preset-solid: ^2.0.1
-    rollup-ts: ^1.0.4
-    sass: ^1.66.1
-    typescript: ^5.0.2
-    vite: ^4.4.2
-  peerDependencies:
-    "@bastant/form": "workspace:^"
-    solid-js: ^1.7.7
-  languageName: unknown
-  linkType: soft
-
 "@bastant/form@workspace:*, @bastant/form@workspace:^, @bastant/form@workspace:packages/form":
   version: 0.0.0-use.local
   resolution: "@bastant/form@workspace:packages/form"
@@ -1496,6 +1475,27 @@ __metadata:
     vite: ^4.4.2
   peerDependencies:
     "@bastant/base": "workspace:^"
+    solid-js: ^1.7.7
+  languageName: unknown
+  linkType: soft
+
+"@bastant/upload@workspace:*, @bastant/upload@workspace:packages/upload":
+  version: 0.0.0-use.local
+  resolution: "@bastant/upload@workspace:packages/upload"
+  dependencies:
+    "@bastant/form": "workspace:^"
+    glob: ^10.3.4
+    mkdirp: ^3.0.1
+    rollup: ^3.28.0
+    rollup-plugin-styles: ^4.0.0
+    rollup-plugin-ts: ^3.4.4
+    rollup-preset-solid: ^2.0.1
+    rollup-ts: ^1.0.4
+    sass: ^1.66.1
+    typescript: ^5.0.2
+    vite: ^4.4.2
+  peerDependencies:
+    "@bastant/form": "workspace:^"
     solid-js: ^1.7.7
   languageName: unknown
   linkType: soft
@@ -3771,10 +3771,10 @@ __metadata:
   dependencies:
     "@bastant/barstil": "workspace:*"
     "@bastant/base": "workspace:*"
-    "@bastant/fileupload": "workspace:*"
     "@bastant/form": "workspace:*"
     "@bastant/i18n": "workspace:*"
     "@bastant/modal": "workspace:*"
+    "@bastant/upload": "workspace:*"
     "@solidjs/router": ^0.8.3
     solid-js: ^1.7.7
     typescript: ^5.0.2
