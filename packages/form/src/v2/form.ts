@@ -188,7 +188,7 @@ function createField<K extends keyof T, T>(
   validations?:
     | Partial<Record<keyof T, Validation[]>>
     | Accessor<Partial<Record<keyof T, Validation[]>>>,
-  validationEvent?: "input" | "blur" | Accessor<"input" | "blur" | undefined>
+  validationEvent?: ValidationEvent | Accessor<ValidationEvent | undefined>
 ) {
   const found = state.fields[name];
   if (found) return found;
@@ -200,6 +200,11 @@ function createField<K extends keyof T, T>(
         batch(() => {
           setState("dirty", true);
           setState("values", name as any, value as any);
+          const vEvent = callOrReturn(validationEvent);
+
+          if (vEvent == "input" || vEvent == "submit") {
+            setState("validationErrors", name as any, [] as any);
+          }
         });
       },
       value() {
@@ -215,7 +220,7 @@ function createField<K extends keyof T, T>(
     () =>
       (callOrReturn(validations) ??
         ({} as Partial<Record<keyof T, Validation[]>>))[name] ?? [],
-    () => callOrReturn(validationEvent)
+    () => callOrReturn(validationEvent) as "input" | "blur" | undefined
   );
 
   setState("fields", name as any, field as any);
