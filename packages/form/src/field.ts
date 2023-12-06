@@ -1,5 +1,5 @@
 import { Accessor, onCleanup, onMount, untrack } from "solid-js";
-import { Validation } from "./validate.js";
+import type { Validation } from "./validations.js";
 import { createControl } from "./control.js";
 
 const $FieldProperty = Symbol("$FieldProperty");

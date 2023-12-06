@@ -1,4 +1,4 @@
-export type { Validation } from "./validate.js";
+export type { Validation } from "./validations.js";
 export * from "./validations.js";
 export * from "./list-state.js";
 export type { Op, ListEntry, ListModel, ListState } from "./list-state.js";
@@ -12,7 +12,7 @@ export {
   type ValidationEvent,
 } from "./form.js";
 
-import type { Validation } from "./validate.js";
+import type { Validation } from "./validations.js";
 
 declare module "solid-js" {
   namespace JSX {

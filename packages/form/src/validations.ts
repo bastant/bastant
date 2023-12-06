@@ -1,4 +1,9 @@
-import { Validation } from "./validate.js";
+export interface Validation {
+  name: string;
+  message: string | ((name: string) => string);
+  init?: (el: HTMLElement) => void;
+  validate(value: unknown): Promise<boolean> | boolean;
+}
 
 export function required(
   msg?: ((name?: string) => string) | string

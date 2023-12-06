@@ -1,5 +1,5 @@
 import { Accessor, batch, createComputed, untrack } from "solid-js";
-import { Validation } from "./validate.js";
+import type { Validation } from "./validations.js";
 import { SetStoreFunction, createStore } from "solid-js/store";
 import { Field, FieldApi } from "./field.js";
 import { toError } from "./util.js";
