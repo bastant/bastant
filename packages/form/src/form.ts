@@ -165,10 +165,6 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
         await validate();
       }
 
-      if (!callOrReturn(options.submitOnError) && !isValid()) {
-        return;
-      }
-
       const con = (
         await Promise.all(
           Object.values(state.fields).map((m: any) => m.beforeSubmit())
@@ -177,7 +173,9 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
         return p | c;
       }, 0);
 
-      if (!con) return;
+      if (!con || (!callOrReturn(options.submitOnError) && !isValid())) {
+        return;
+      }
 
       setState("status", "submitting");
       try {
