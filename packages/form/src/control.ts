@@ -1,5 +1,5 @@
 import { Accessor, createComputed, onCleanup } from "solid-js";
-import { getValue, setValue as setElValue } from "../util.js";
+import { getValue, setValue as setElValue } from "./util.js";
 
 export function createControl<T>(
   value: Accessor<T | undefined>,

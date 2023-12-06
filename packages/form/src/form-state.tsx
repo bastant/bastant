@@ -1,5 +1,5 @@
 import { Show } from "solid-js";
-import { FormApi } from "./form-api";
+import { FormApi } from "./form.js";
 
 export interface FormStateProps<T> {
   form?: FormApi<T>;

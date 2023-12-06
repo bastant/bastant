@@ -10,12 +10,11 @@ import { FormSettingsForm, Settings } from "./form-settings-form";
 import {
   FieldApi,
   createForm,
-  createFormApi,
   max,
   min,
   required,
   FormState,
-  v2,
+  useSubmitHook,
 } from "@bastant/form";
 import { Trans, useFixedTFunc } from "@bastant/i18n";
 import { DynamicShow } from "@bastant/base";
@@ -31,7 +30,7 @@ export default function Page() {
 
   const t = useFixedTFunc(null, () => "formning");
 
-  const api = v2.createForm<{ name: string; age: number; file?: File }>({
+  const api = createForm<{ name: string; age: number; file?: File }>({
     defaultValues: defaults,
     validations: {
       name: [required(), min(2), max(100)],
@@ -53,7 +52,7 @@ export default function Page() {
     age = api.field("age"),
     fileField = api.field("file");
 
-  v2.useSubmitHook(age, (v) => {
+  useSubmitHook(age, (v) => {
     console.log("before submit", v);
     return true;
   });
@@ -61,7 +60,7 @@ export default function Page() {
   return (
     <div>
       <FormSettingsForm onChange={setSettings} />
-      {/* <FormState form={api} /> */}
+      <FormState form={api} />
       <Show when={api.submitError()}>
         <div>Submit failed: {api.submitError()?.message}</div>
       </Show>
@@ -122,7 +121,7 @@ export default function Page() {
 }
 
 export interface FieldProps<T> {
-  field?: v2.FieldApi<T>;
+  field?: FieldApi<T>;
   label?: string;
 }
 

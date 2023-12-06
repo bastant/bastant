@@ -1,8 +1,8 @@
 import { Accessor, batch, createComputed, untrack } from "solid-js";
-import { Validation } from "../validate.js";
+import { Validation } from "./validate.js";
 import { SetStoreFunction, createStore } from "solid-js/store";
 import { Field, FieldApi } from "./field.js";
-import { toError } from "../util.js";
+import { toError } from "./util.js";
 import { createControl } from "./control.js";
 
 export type Status = "editing" | "submitting" | "validating" | "failed";
@@ -34,6 +34,7 @@ export interface FormApi<T> {
   submit(e?: Event): void;
   clear(): void;
   reset(): void;
+  status: Accessor<Status>;
   validate(): Promise<boolean>;
   control<E extends HTMLElement>(el: E, accessor?: () => true): void;
 
@@ -89,6 +90,9 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
     },
     isDirty() {
       return state.dirty;
+    },
+    status() {
+      return state.status;
     },
     isValid,
     submitError() {
