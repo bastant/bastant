@@ -65,13 +65,10 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
   });
 
   const reset = () => {
-    const track = callOrReturn(
-      options.resetOnDefaultValueChange ?? false,
-      true
-    );
+    const track = callOrReturn(options.resetOnDefaultValueChange ?? true, true);
     setState((state) => ({
       ...state,
-      values: callOrReturn(options.defaultValues, track) ?? {},
+      values: { ...(callOrReturn(options.defaultValues, track) ?? {}) },
       dirty: false,
       validationErrors: {},
       submitError: void 0,
@@ -142,7 +139,7 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
         status: "editing",
       }));
     },
-    reset,
+    reset: () => untrack(reset),
     validate,
     control<E extends HTMLElement>(el: E) {
       const name = el.getAttribute("name") as keyof T;
