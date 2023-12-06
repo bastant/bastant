@@ -36,6 +36,11 @@ export default function Page() {
   const name = api.field("name"),
     age = api.field("age");
 
+  v2.useSubmitHook(age, (v) => {
+    console.log("before submit", v);
+    return true;
+  });
+
   return (
     <div>
       <FormSettingsForm onChange={setSettings} />
