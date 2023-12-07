@@ -1,4 +1,4 @@
-import { Accessor, onCleanup, onMount, untrack } from "solid-js";
+import { Accessor, batch, onCleanup, onMount, untrack } from "solid-js";
 import type { Validation } from "./validations.js";
 import { createControl } from "./control.js";
 
@@ -18,6 +18,7 @@ export interface FieldApi<T> {
   touch(): void;
   errors(): string[] | undefined;
   control<E extends HTMLElement>(el: E, accessor?: () => true): void;
+  validate(): Promise<boolean>;
 }
 
 export class Field<K extends keyof T, T> {
@@ -25,7 +26,6 @@ export class Field<K extends keyof T, T> {
   #validations: Accessor<Validation[]>;
   #name: K;
   #validationEvent: Accessor<"input" | "blur" | undefined>;
-
   #hooks: ((value?: T[K]) => Promise<boolean> | boolean)[] = [];
 
   constructor(
@@ -52,20 +52,22 @@ export class Field<K extends keyof T, T> {
       return true;
     }
 
+    const value = untrack(this.#channel.value);
+
     let ok = 0;
     for (const hook of this.#hooks) {
-      ok |= (await Promise.resolve(
-        hook(this.#channel.value())
-      )) as unknown as number;
+      ok |= (await Promise.resolve(hook(value))) as unknown as number;
     }
 
     return !!ok;
   }
 
   async validate() {
-    const errors = await Promise.all(
-      untrack(this.#validations).map(async (m) => {
-        if (await Promise.resolve(m.validate(this.#channel.value()))) {
+    const value = untrack(this.#channel.value);
+
+    const result = await Promise.all(
+      this.#validations().map(async (m) => {
+        if (await Promise.resolve(m.validate(value))) {
           return null;
         } else {
           return typeof m.message === "function"
@@ -75,7 +77,11 @@ export class Field<K extends keyof T, T> {
       })
     );
 
-    this.#channel.setErrors(errors.filter(Boolean) as string[]);
+    const errors = result.filter(Boolean) as string[];
+
+    this.#channel.setErrors(errors);
+
+    return !!errors.length;
   }
 
   api(): FieldApi<T[K]> {
@@ -88,10 +94,12 @@ export class Field<K extends keyof T, T> {
           return;
         }
       }
-      this.#channel.setValue(value);
-      if (event === "input") {
-        this.validate();
-      }
+      batch(() => {
+        this.#channel.setValue(value);
+        if (event === "input") {
+          this.validate();
+        }
+      });
     };
 
     const touch = () => {
@@ -108,6 +116,7 @@ export class Field<K extends keyof T, T> {
       control: createControl(this.#channel.value, setValue, touch),
       touch,
       errors: this.#channel.errors,
+      validate: () => this.validate(),
     };
   }
 }

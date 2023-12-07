@@ -1,6 +1,6 @@
 import { Accessor, batch, createComputed, untrack } from "solid-js";
 import type { Validation } from "./validations.js";
-import { SetStoreFunction, createStore } from "solid-js/store";
+import { SetStoreFunction, createStore, unwrap } from "solid-js/store";
 import { Field, FieldApi } from "./field.js";
 import { toError } from "./util.js";
 import { createControl } from "./control.js";
@@ -86,7 +86,7 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
   };
 
   const validate = async () => {
-    for (const name in state.fields) {
+    for (const name in unwrap(state.fields)) {
       await state.fields[name]?.validate();
     }
 
@@ -120,7 +120,7 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
         name,
         state,
         setState,
-        options.validations ?? {},
+        options.validations,
         options.validationEvent as any
       );
 
@@ -185,8 +185,10 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
           setState("dirty", false);
         });
       } catch (e) {
-        setState("status", "failed");
-        setState("submitError", toError(e));
+        batch(() => {
+          setState("status", "failed");
+          setState("submitError", toError(e));
+        });
       }
     },
   };
