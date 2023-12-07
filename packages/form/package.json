@@ -1,6 +1,6 @@
 {
   "name": "@bastant/form",
-  "version": "1.4.2",
+  "version": "1.5.0",
   "type": "module",
   "files": [
     "dist"
