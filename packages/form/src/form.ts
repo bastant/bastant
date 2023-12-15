@@ -79,9 +79,8 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
   createComputed(reset);
 
   const isValid = () => {
-    return (
-      !state.submitError &&
-      !Object.values(state.validationErrors).some((m) => (m as any).length)
+    return !Object.values(state.validationErrors).some(
+      (m) => (m as any).length
     );
   };
 
@@ -160,6 +159,8 @@ export function createForm<T>(options: FormOptions<T>): FormApi<T> {
     },
     async submit(e?: Event) {
       e?.preventDefault();
+
+      setState("submitError", void 0);
 
       if (callOrReturn(options.validationEvent) == "submit") {
         await validate();
