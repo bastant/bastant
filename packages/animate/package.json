@@ -1,6 +1,6 @@
 {
-  "name": "@bastant/form",
-  "version": "1.5.1",
+  "name": "@bastant/animate",
+  "version": "0.1.0",
   "type": "module",
   "files": [
     "dist"
@@ -9,9 +9,6 @@
   "module": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "repository": "https://github.com/bastant/bastant",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "exports": {
     ".": {
       "solid": {
@@ -51,5 +48,9 @@
     "rollup-ts": "^1.0.4",
     "typescript": "^5.0.2",
     "vite": "^4.4.2"
+  },
+  "dependencies": {
+    "@solid-primitives/refs": "^1.0.5",
+    "@solid-primitives/transition-group": "^1.0.3"
   }
 }

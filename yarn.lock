@@ -1397,6 +1397,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@bastant/animate@workspace:*, @bastant/animate@workspace:packages/animate":
+  version: 0.0.0-use.local
+  resolution: "@bastant/animate@workspace:packages/animate"
+  dependencies:
+    "@solid-primitives/refs": ^1.0.5
+    "@solid-primitives/transition-group": ^1.0.3
+    rollup: ^3.28.0
+    rollup-plugin-ts: ^3.4.4
+    rollup-preset-solid: ^2.0.1
+    rollup-ts: ^1.0.4
+    typescript: ^5.0.2
+    vite: ^4.4.2
+  peerDependencies:
+    solid-js: ^1.7.7
+  languageName: unknown
+  linkType: soft
+
 "@bastant/barstil@workspace:*, @bastant/barstil@workspace:packages/barstil":
   version: 0.0.0-use.local
   resolution: "@bastant/barstil@workspace:packages/barstil"
@@ -1436,7 +1453,6 @@ __metadata:
     rollup-plugin-ts: ^3.4.4
     rollup-preset-solid: ^2.0.1
     rollup-ts: ^1.0.4
-    type-fest: ^4.3.2
     typescript: ^5.0.2
     vite: ^4.4.2
   peerDependencies:
@@ -1454,7 +1470,6 @@ __metadata:
     rollup-plugin-ts: ^3.4.4
     rollup-preset-solid: ^2.0.1
     rollup-ts: ^1.0.4
-    type-fest: ^4.3.2
     typescript: ^5.0.2
   peerDependencies:
     i18next: ^23.4.4
@@ -1466,7 +1481,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@bastant/modal@workspace:packages/modal"
   dependencies:
-    "@bastant/base": "workspace:*"
+    "@bastant/animate": "workspace:*"
     rollup: ^3.28.0
     rollup-plugin-ts: ^3.4.4
     rollup-preset-solid: ^2.0.1
@@ -1474,7 +1489,7 @@ __metadata:
     typescript: ^5.0.2
     vite: ^4.4.2
   peerDependencies:
-    "@bastant/base": "workspace:^"
+    "@bastant/animate": "workspace:^"
     solid-js: ^1.7.7
   languageName: unknown
   linkType: soft

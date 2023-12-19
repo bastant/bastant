@@ -54,7 +54,6 @@
     "typescript": "^5.0.2"
   },
   "dependencies": {
-    "html-parse-string": "^0.0.9",
-    "type-fest": "^4.3.2"
+    "html-parse-string": "^0.0.9"
   }
 }

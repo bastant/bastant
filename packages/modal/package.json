@@ -37,7 +37,7 @@
     }
   },
   "peerDependencies": {
-    "@bastant/base": "workspace:^",
+    "@bastant/animate": "workspace:^",
     "solid-js": "^1.7.7"
   },
   "scripts": {
@@ -46,7 +46,7 @@
     "prepublish": "rollup -c"
   },
   "devDependencies": {
-    "@bastant/base": "workspace:*",
+    "@bastant/animate": "workspace:*",
     "rollup": "^3.28.0",
     "rollup-plugin-ts": "^3.4.4",
     "rollup-preset-solid": "^2.0.1",

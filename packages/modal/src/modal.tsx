@@ -1,15 +1,7 @@
 import type { JSXElement, Component, JSX } from "solid-js";
 import { Portal } from "solid-js/web";
-import {
-  Show,
-  createSignal,
-  createComputed,
-  createEffect,
-  on,
-  onMount,
-  createMemo,
-} from "solid-js";
-import { DynamicShow, Reveal } from "@bastant/base";
+import { Show, createSignal, createComputed } from "solid-js";
+import { DynamicShow, type AnimateFunc } from "@bastant/animate";
 
 export interface ModalProps {
   show?: boolean;
@@ -62,16 +54,16 @@ export interface CreateModalOptions extends CreateModalApiOptions {
   overlayStyle?: JSX.CSSProperties;
   overlayClass?: string;
   overlayAnimation?: {
-    enter: Keyframe[];
-    leave: Keyframe[];
+    enter: Keyframe[] | AnimateFunc<HTMLDivElement>;
+    leave: Keyframe[] | AnimateFunc<HTMLDivElement>;
     delay?: number;
     duration: number;
     easing?: string;
   };
   //
   dialogAnimation?: {
-    enter: Keyframe[];
-    leave: Keyframe[];
+    enter: Keyframe[] | AnimateFunc<HTMLDivElement>;
+    leave: Keyframe[] | AnimateFunc<HTMLDivElement>;
     delay?: number;
     duration: number;
     easing?: string;
@@ -86,13 +78,13 @@ export function createModal(options: CreateModalOptions = {}): ModalControl {
       ["background-color"]: "rgba(0,0,0,0.7)",
     },
     overlayAnimation = {
-      enter: [{ opacity: 1 }],
-      leave: [{ opacity: 0 }],
+      enter: [{ opacity: 0 }, { opacity: 1 }],
+      leave: [{ opacity: 1 }, { opacity: 0 }],
       duration: 300,
     },
     dialogAnimation = {
-      enter: [{ opacity: 1 }],
-      leave: [{ opacity: 0 }],
+      enter: [{ opacity: 0 }, { opacity: 1 }],
+      leave: [{ opacity: 1 }, { opacity: 0 }],
       duration: 200,
     },
   } = options;
