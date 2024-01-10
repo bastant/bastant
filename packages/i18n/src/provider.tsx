@@ -16,7 +16,6 @@ import type {
   Newable,
   NewableModule,
 } from "i18next";
-import i18next from "i18next";
 
 interface Context {
   instance: Accessor<{ i18n: i18n; loaded: boolean }>;
@@ -33,6 +32,14 @@ function useI18nContext(): Context {
   }
 
   return ctx;
+}
+
+export function useIsI18n(): boolean {
+  try {
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 export function useI18n(): Accessor<i18n> {
@@ -62,7 +69,7 @@ export interface I18nProviderProps {
   i18n?: i18n;
   options?: InitOptions;
   plugins?: (Module | NewableModule<Module> | Newable<Module>)[];
-  init?: (instance: i18n) => void;
+  init?: (instance: i18n) => Promise<void> | void;
 }
 
 export function I18nProvider(props: ParentProps<I18nProviderProps>) {
@@ -70,14 +77,18 @@ export function I18nProvider(props: ParentProps<I18nProviderProps>) {
 
   function Inner(props: ParentProps<I18nProviderProps>) {
     const [instance, setInstance] = createSignal({
-      i18n: props.i18n ?? i18next,
+      i18n: props.i18n ?? (void 0 as unknown as i18n),
       loaded: false,
     });
 
-    onMount(() => {
+    onMount(async () => {
+      if (!instance().i18n) {
+        instance().i18n = (await import("i18next")).default;
+      }
+
       (props.plugins ?? []).forEach((item) => instance().i18n.use(item));
 
-      props.init?.(instance().i18n);
+      await props.init?.(instance().i18n);
 
       loadI18n(instance().i18n, props.options).then(([i]) => {
         setInstance({

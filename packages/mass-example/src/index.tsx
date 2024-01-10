@@ -1,13 +1,6 @@
 import { render } from "solid-js/web";
 import { createForm } from "@bastant/form";
 import { createModal } from "@bastant/modal";
-import {
-  FileInput,
-  LocalFile,
-  UploadButton,
-  createFileManager,
-  Preview,
-} from "@bastant/fileupload";
 
 import { For, createSignal, lazy } from "solid-js";
 import { A, Route, Router, Routes } from "@solidjs/router";
