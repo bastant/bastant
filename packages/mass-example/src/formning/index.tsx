@@ -19,6 +19,7 @@ import {
 import { Trans, useFixedTFunc } from "@bastant/i18n";
 import { DynamicShow } from "@bastant/base";
 import { FileInput, UploadButton, file, mime } from "@bastant/upload";
+import { padding } from "../styling/helpers";
 
 export default function Page() {
   const [settings, setSettings] = createSignal<Settings>();
@@ -60,7 +61,7 @@ export default function Page() {
   });
 
   return (
-    <div>
+    <div classList={padding({ p: "large" })}>
       <FormSettingsForm onChange={setSettings} />
       <FormState form={api} />
       <Show when={api.submitError()}>

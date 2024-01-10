@@ -45,7 +45,8 @@ export function padding(opts: PaddingOption) {
 [css['padding-large-top']]: opts.pt == "large",
 [css['padding-large-bottom']]: opts.pb == "large",
 [css['padding-large-left']]: opts.pl == "large",
-[css['padding-large-right']]: opts.pr == "large"
+[css['padding-large-right']]: opts.pr == "large",
+      [css["padding"]]: true
   }
 }
 export type Margin = keyof typeof SPACINGS;
@@ -77,7 +78,8 @@ export function margin(opts: MarginOption) {
 [css['margin-large-top']]: opts.mt == "large",
 [css['margin-large-bottom']]: opts.mb == "large",
 [css['margin-large-left']]: opts.ml == "large",
-[css['margin-large-right']]: opts.mr == "large"
+[css['margin-large-right']]: opts.mr == "large",
+      [css["margin"]]: true
   }
 }
 export type FontWeight = keyof typeof FONT_WEIGHTS

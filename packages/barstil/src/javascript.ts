@@ -147,7 +147,8 @@ function createDirProp(
     true
   )}(opts: ${interfaceName}) {
     return {
-        ${cases.join(",\n  ")}
+        ${cases.join(",\n  ")},
+        [css["${prop}"]]: true
     }
   }
   `;

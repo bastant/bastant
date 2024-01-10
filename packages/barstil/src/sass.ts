@@ -64,6 +64,7 @@ export async function create(sections: Section[], options: CreateOptions) {
           if (["padding", "margin", "border-radius"].includes(prop)) {
             return dedent`
           .${prop} {
+            ${prop}: 0;
             @include barstil.create-dir-prop($${section.cssName}-map, ${prop}, ${section.name});
           }
           `;
