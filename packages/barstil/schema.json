@@ -63,6 +63,12 @@
         "type": ["string", "number"]
       }
     },
+    "fontFamilies": {
+      "type": "object",
+      "additionalProperties": {
+        "type": ["string", "number"]
+      }
+    },
     "variables": {
       "type": "object",
       "additionalProperties": {
