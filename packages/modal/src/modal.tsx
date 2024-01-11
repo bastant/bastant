@@ -99,7 +99,7 @@ export function createModal(options: CreateModalOptions = {}): ModalControl {
             show={show()}
             enter={overlayAnimation.enter}
             leave={overlayAnimation.leave}
-            duration={overlayAnimation.duration}
+            duration={overlayAnimation.duration ?? 300}
             delay={show() ? 0 : 100}
             easing={overlayAnimation.easing}
             onLeave={() => {
@@ -118,7 +118,7 @@ export function createModal(options: CreateModalOptions = {}): ModalControl {
               enter={dialogAnimation.enter}
               leave={dialogAnimation.leave}
               easing={dialogAnimation.easing}
-              duration={dialogAnimation.duration}
+              duration={dialogAnimation.duration ?? 200}
               delay={show() ? 100 : 0}
             >
               {props.children}
