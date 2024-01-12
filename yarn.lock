@@ -1426,7 +1426,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@bastant/base@workspace:*, @bastant/base@workspace:packages/base":
+"@bastant/base@workspace:packages/base":
   version: 0.0.0-use.local
   resolution: "@bastant/base@workspace:packages/base"
   dependencies:
@@ -3784,8 +3784,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "mass-example@workspace:packages/mass-example"
   dependencies:
+    "@bastant/animate": "workspace:*"
     "@bastant/barstil": "workspace:*"
-    "@bastant/base": "workspace:*"
     "@bastant/form": "workspace:*"
     "@bastant/i18n": "workspace:*"
     "@bastant/modal": "workspace:*"
