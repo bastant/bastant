@@ -37,7 +37,7 @@ function mergeArrays<A, B>(
  * Merge deep objects
  * @param args
  */
-function deepExtend(...args: any[]): any {
+export function deepExtend(...args: any[]): any {
   let a = args.shift();
 
   for (let i = 0; i < args.length; i += 1) {
@@ -81,5 +81,3 @@ function deepExtend(...args: any[]): any {
   }
   return a;
 }
-
-export default deepExtend;
