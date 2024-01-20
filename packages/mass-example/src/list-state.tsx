@@ -1,5 +1,12 @@
-import { ListModel, createListState } from "@bastant/form";
-import { For, createSignal, createUniqueId } from "solid-js";
+import { ListModel, createListState2 } from "@bastant/form";
+import {
+  For,
+  createEffect,
+  createMemo,
+  createSignal,
+  createUniqueId,
+} from "solid-js";
+import { TransistorList } from "@bastant/animate";
 
 interface Model extends ListModel {
   id: string;
@@ -18,38 +25,59 @@ export default function ListState() {
     },
   ]);
 
-  const state = createListState(list);
+  const state = createListState2(() => list().map((m) => ({ ...m })));
 
   return (
     <div>
       <button
         onClick={() => {
-          setList([{ name: "Osten", id: createUniqueId() }]);
+          state.reset();
         }}
       >
         Reset
       </button>
-      <For each={state.items()}>
-        {(item) => {
-          console.log(item);
-          return (
-            <div>
-              <div>value: {item.value.name}</div>
-              <button onClick={() => state.delete(item.id)}>Delete</button>
-              <button
-                onClick={() =>
-                  state.update(item.id, {
-                    ...item.value,
-                    name: item.value.name + "2000",
-                  })
-                }
-              >
-                Update
-              </button>
-            </div>
-          );
-        }}
-      </For>
+      <TransistorList
+        exit="keep-index"
+        enter={(el) =>
+          el.animate(
+            [
+              { opacity: 0, height: 0 },
+              { opacity: 1, height: el.clientHeight + "px" },
+            ],
+            { duration: 200 }
+          )
+        }
+        leave={(el) =>
+          el.animate(
+            [
+              { opacity: 1, height: el.clientHeight + "px" },
+              { opacity: 0, height: 0 },
+            ],
+            { duration: 200 }
+          )
+        }
+      >
+        <For each={state.items()}>
+          {(item) => {
+            return (
+              <div>
+                <div>value: {item.value.name}</div>
+                <button onClick={() => state.delete(item.id)}>Delete</button>
+                <button
+                  onClick={() =>
+                    state.update(item.id, {
+                      ...item.value,
+                      name: item.value.name + "2000",
+                    })
+                  }
+                >
+                  Update
+                </button>
+              </div>
+            );
+          }}
+        </For>
+      </TransistorList>
       <button
         onClick={() => {
           const id = state.create({ name: "Hello, World new" });
@@ -59,21 +87,31 @@ export default function ListState() {
         Create
       </button>
       <h1>Operations</h1>
-      <For each={state.ops()}>
-        {(op) => {
-          let out = (() => {
-            switch (op.type) {
-              case "create":
-                return `create: ${op.value.name}`;
-              case "update":
-                return `update: ${op.value.name}`;
-              case "delete":
-                return `delete: ${op.id}`;
-            }
-          })();
-          return <div>{out}</div>;
-        }}
-      </For>
+
+      <TransistorList
+        enter={(el) =>
+          el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200 })
+        }
+        leave={(el) =>
+          el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 200 })
+        }
+      >
+        <For each={state.ops()}>
+          {(op) => {
+            let out = createMemo(() => {
+              switch (op.type) {
+                case "create":
+                  return `create: ${op.value.name}`;
+                case "update":
+                  return `update: ${op.value.name}`;
+                case "delete":
+                  return `delete: ${op.id}`;
+              }
+            });
+            return <div>{out()}</div>;
+          }}
+        </For>
+      </TransistorList>
     </div>
   );
 }

@@ -1,11 +1,14 @@
 import type { Accessor } from "solid-js";
 import {
+  batch,
   createEffect,
   createMemo,
   createSignal,
   createUniqueId,
   on,
+  untrack,
 } from "solid-js";
+import { createStore } from "solid-js/store";
 
 export type Id = string;
 
@@ -140,6 +143,137 @@ export function createListState<T extends ListModel>(
     items: outputItem,
     ops() {
       return ops();
+    },
+  };
+}
+
+export function createListState2<T extends ListModel>(
+  items: Accessor<T[]>
+): ListState<T> {
+  const [store, setStore] = createStore<{
+    ops: (Operation<T> & { value?: NewModel<T> })[];
+    items: ListEntry<T>[];
+    idsInItems: Set<string | number>;
+  }>({
+    ops: [],
+    items: [],
+    idsInItems: new Set(),
+  });
+
+  function setItems(items: T[]) {
+    setStore(
+      "items",
+      items.map((item) => ({
+        id: item.id,
+        value: item,
+        isPersistent: true,
+      }))
+    );
+
+    setStore("idsInItems", new Set(items.map((m) => m.id)));
+  }
+
+  createEffect(
+    on(items, (items) => {
+      setStore("ops", []);
+      setItems(items);
+    })
+  );
+
+  createEffect(() => {
+    const removed = store.ops
+      .filter((m) => m.type === "delete")
+      .map((m) => m.id);
+
+    const ids = untrack(() => store.idsInItems);
+
+    const updated = store.ops.filter((m) => m.type == "update");
+    const created = store.ops
+      .filter((m) => m.type == "create" && !ids.has(m.id))
+      .map((m) => ({
+        id: m.id,
+        value: (m as any).value,
+        isPersistent: false,
+      }));
+
+    setStore("items", (items) => {
+      return [...items.filter((m) => !removed.includes(m.id)), ...created];
+    });
+
+    for (const i of removed) {
+      ids.delete(i);
+    }
+
+    for (const i of created) {
+      ids.add(i.id);
+    }
+
+    for (const update of updated) {
+      setStore(
+        "items",
+        (item) => item.id == update.id,
+        "value",
+        () => (update as any).value
+      );
+    }
+  });
+
+  return {
+    create(item) {
+      const id = createUniqueId();
+      setStore("ops", (ops) => [...ops, { type: "create", id, value: item }]);
+
+      return id;
+    },
+    update(id, item) {
+      const foundInItems = untrack(items).find((m) => m.id == id);
+
+      const op = {
+        type: foundInItems ? "update" : "create",
+        id,
+        value: item,
+      } as Operation<T>;
+
+      const ops = untrack(() => store.ops);
+
+      const foundInOps = ops.findIndex((m) => m.id == id);
+      if (!!~foundInOps) {
+        setStore("ops", foundInOps, "value", item);
+        if (foundInItems) {
+          setStore("items", (item) => item.id == id, "value", item);
+        }
+      } else {
+        setStore("ops", (ops) => [...ops.filter((m) => m.id != id), op]);
+      }
+    },
+    delete(id) {
+      const foundInItems = untrack(items).find((m) => m.id == id);
+      if (foundInItems) {
+        setStore("ops", (ops) => [
+          ...ops.filter((m) => m.id != id),
+          { type: "delete", id },
+        ]);
+      } else {
+        batch(() => {
+          setStore("ops", (ops) => ops.filter((m) => m.id != id));
+          setStore("items", (items) => items.filter((m) => m.id != id) as any);
+        });
+      }
+    },
+    reset() {
+      batch(() => {
+        setStore({
+          items: [],
+          ops: [],
+        });
+        setItems(untrack(items));
+      });
+    },
+    ops() {
+      return store.ops;
+    },
+    items() {
+      return store.items;
     },
   };
 }
