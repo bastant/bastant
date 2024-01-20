@@ -10,8 +10,8 @@
     "build-styling": "node build.mjs"
   },
   "dependencies": {
-    "@bastant/barstil": "workspace:*",
     "@bastant/animate": "workspace:*",
+    "@bastant/barstil": "workspace:*",
     "@bastant/form": "workspace:*",
     "@bastant/i18n": "workspace:*",
     "@bastant/modal": "workspace:*",
