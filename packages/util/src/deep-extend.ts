@@ -52,7 +52,7 @@ function deepExtend(...args: any[]): any {
       // Merge objects
       if (typeof a === "object" && typeof b === "object") {
         // Merge arrays
-        if (a instanceof Array && b instanceof Array) {
+        if (Array.isArray(a) && Array.isArray(b)) {
           a = mergeArrays(a, b, deepExtend);
         } else {
           const keys: string[] = Object.keys(b);
@@ -72,7 +72,7 @@ function deepExtend(...args: any[]): any {
         }
       }
     } else if (b !== null && typeof b !== "undefined") {
-      if (b instanceof Array) {
+      if (Array.isArray(b)) {
         a = mergeArrays([], b, deepExtend);
       } else {
         a = b;

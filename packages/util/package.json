@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "type": "module",
   "files": [
-    "dist"
+    "lib"
   ],
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/types/index.d.ts",
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "repository": "https://github.com/bastant/bastant",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
@@ -15,27 +15,15 @@
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/types/index.d.ts",
-        "default": "./dist/esm/index.js"
-      },
-      "browser": {
-        "types": "./dist/types/index.d.ts",
-        "default": "./dist/esm/index.js"
-      },
-      "require": {
-        "types": "./dist/types/index.d.ts",
-        "default": "./dist/cjs/index.js"
-      },
-      "node": {
-        "types": "./dist/types/index.d.ts",
-        "default": "./dist/cjs/index.js"
+        "types": "./lib/index.d.ts",
+        "default": "./lib/index.js"
       }
     }
   },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "test": "mocha",
+    "test": "mocha lib",
     "prepublish": "tsc -c"
   },
   "devDependencies": {
