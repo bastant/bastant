@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import deepExtend from "./deep-extend.js";
+import { deepExtend } from "./deep-extend.js";
 
 describe("deepExtend(null, null)", () => {
   it("should return null", () => {
