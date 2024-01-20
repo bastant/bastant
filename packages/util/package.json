@@ -24,7 +24,7 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "mocha lib",
-    "prepublish": "tsc -c"
+    "prepublish": "tsc"
   },
   "devDependencies": {
     "@types/chai": "^4.3.11",
