@@ -48,10 +48,7 @@
   "devDependencies": {
     "i18next": "^23.4.4",
     "rollup": "^3.28.0",
-    "rollup-plugin-ts": "^3.4.4",
-    "rollup-preset-solid": "^2.0.1",
-    "rollup-ts": "^1.0.4",
-    "typescript": "^5.0.2"
+    "rollup-preset-solid": "^2.0.1"
   },
   "dependencies": {
     "html-parse-string": "^0.0.9"
