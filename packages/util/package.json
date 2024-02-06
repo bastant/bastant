@@ -23,7 +23,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "test": "mocha lib",
+    "test": "tsc; mocha lib",
     "prepublish": "tsc"
   },
   "devDependencies": {
