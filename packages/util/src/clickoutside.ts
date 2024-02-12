@@ -1,6 +1,6 @@
 import { Accessor, createEffect, onCleanup } from "solid-js";
 
-export function createClickout<T extends HTMLElement>(
+export function createClickOutsideEffect<T extends HTMLElement>(
   el: Accessor<T>,
   func: () => unknown
 ) {
@@ -22,7 +22,7 @@ export function clickOutside<T extends HTMLElement>(
   el: T,
   accessor: () => (() => any) | undefined
 ) {
-  createClickout(
+  createClickOutsideEffect(
     () => el,
     () => accessor()?.()
   );

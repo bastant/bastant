@@ -1,0 +1,59 @@
+{
+  "name": "@bastant/floating",
+  "version": "0.0.1",
+  "type": "module",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -cw",
+    "prepublishOnly": "rollup -c"
+  },
+  "sideEffects": [
+    "dist/**/*.css"
+  ],
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "solid": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/source/index.js"
+      },
+      "import": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "browser": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      },
+      "node": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
+  },
+  "devDependencies": {
+    "@bastant/rollup-preset": "^0.1.4",
+    "rollup": "^4.9.6",
+    "solid-js": "^1.8.12"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.8.12"
+  },
+  "dependencies": {
+    "@floating-ui/dom": "^1.6.1",
+    "@solid-primitives/event-listener": "^2.3.0"
+  }
+}
