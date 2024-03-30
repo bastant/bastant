@@ -280,3 +280,39 @@ export namespace Container {
     return _global;
   }
 }
+
+function createConstructionSet(
+  fn: Function,
+  defaultResolver: IDependencyResolver,
+  targetKey: SectionType
+): ConstructionInfo {
+  let info: ConstructionInfo = {
+    activator:
+      (getMetadata(MetaKeys.instanceActivator, fn, targetKey) as IActivator) ||
+      ClassActivator.instance,
+    keys: EMPTY_PARAMS,
+    dependencyResolver:
+      (getMetadata(
+        MetaKeys.dependencyResolver,
+        fn,
+        targetKey
+      ) as IDependencyResolver) || defaultResolver,
+  };
+
+  if ((<any>fn).inject !== undefined) {
+    if (typeof (<any>fn).inject === "function") {
+      info.keys = (<any>fn).inject();
+    } else {
+      info.keys = (<any>fn).inject;
+    }
+
+    return info;
+  }
+
+  const params = getMetadata(MetaKeys.paramTypes, fn, targetKey) as unknown[];
+  if (params) {
+    info.keys = params;
+  }
+
+  return info;
+}

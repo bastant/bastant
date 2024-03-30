@@ -1,5 +1,12 @@
 import { custom, inject, singleton } from "@bastant/di";
-import { createUniqueId } from "solid-js";
+import {
+  Accessor,
+  Setter,
+  createEffect,
+  createSignal,
+  createUniqueId,
+  onCleanup,
+} from "solid-js";
 
 export class TestInjector {
   id: string;
@@ -13,9 +20,17 @@ custom(TestInjector, (fn) => {
 });
 
 export class Config {
-  userId: string;
+  signal: [Accessor<string>, Setter<string>];
   constructor(test: TestInjector) {
-    this.userId = "user__" + test.id;
+    this.signal = createSignal("user__" + test.id);
+  }
+
+  get userId() {
+    return this.signal[0]();
+  }
+
+  update() {
+    this.signal[1]("user__" + createUniqueId());
   }
 }
 

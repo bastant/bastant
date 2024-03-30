@@ -1,6 +1,6 @@
 import { createModal } from "@bastant/modal";
 import { directives } from "@bastant/base";
-import { onCleanup, onMount } from "solid-js";
+import { createEffect, onCleanup, onMount } from "solid-js";
 import { get } from "@bastant/di";
 import { Config } from "./config";
 const clickOutside = directives.clickOutside;
@@ -16,6 +16,15 @@ export default function ModalPage() {
   });
 
   const config = get<Config>(Config);
+
+  createEffect(() => {
+    const timer = setInterval(() => {
+      config().update();
+    }, 1000);
+    onCleanup(() => {
+      clearInterval(timer);
+    });
+  });
 
   return (
     <div>
@@ -46,7 +55,7 @@ export default function ModalPage() {
           >
             Hello, World!
           </h1>
-          <p>UserId: {config.userId}</p>
+          <p>UserId: {config().userId}</p>
           <button
             onClick={(e) => {
               e.preventDefault();

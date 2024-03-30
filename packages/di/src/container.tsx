@@ -1,4 +1,12 @@
-import { ParentProps, createContext, useContext } from "solid-js";
+import {
+  Accessor,
+  ParentProps,
+  createContext,
+  createEffect,
+  createMemo,
+  createSignal,
+  useContext,
+} from "solid-js";
 import { Container } from "./di/container.js";
 
 const CONTEXT = createContext<Container>();
@@ -18,9 +26,9 @@ export function IoCContainer(props: ParentProps) {
   );
 }
 
-export function get<T>(key: unknown): T {
+export function get<T>(key: unknown): Accessor<T> {
   const container = useContainer();
-  return container.get(key) as T;
+  return createMemo(() => container.get(key)) as Accessor<T>;
 }
 
 export function register(key: unknown, value: unknown) {
