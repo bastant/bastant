@@ -1,6 +1,8 @@
 import { createModal } from "@bastant/modal";
 import { directives } from "@bastant/base";
 import { onCleanup, onMount } from "solid-js";
+import { get } from "@bastant/di";
+import { Config } from "./config";
 const clickOutside = directives.clickOutside;
 const keypressOutside = directives.keypressOutside;
 
@@ -12,6 +14,8 @@ export default function ModalPage() {
       duration: 300,
     },
   });
+
+  const config = get<Config>(Config);
 
   return (
     <div>
@@ -42,6 +46,7 @@ export default function ModalPage() {
           >
             Hello, World!
           </h1>
+          <p>UserId: {config.userId}</p>
           <button
             onClick={(e) => {
               e.preventDefault();
