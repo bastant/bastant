@@ -1,5 +1,5 @@
 import { type Trigger, createTrigger } from "@solid-primitives/trigger";
-import { AReactiveItem, Equality, IReactiveItem } from "./types.js";
+import { AReactiveItem, type Equality, type IReactiveItem } from "./types.js";
 
 export class ReactiveValue<T>
   extends AReactiveItem
@@ -29,7 +29,11 @@ export class ReactiveValue<T>
     }
   }
 
-  update(item: T) {
+  $update(item: T) {
     this.data = item;
+  }
+
+  $data() {
+    return this.data;
   }
 }

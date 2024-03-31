@@ -13,7 +13,8 @@ import {
   IReactiveList,
   ReactiveArray,
   ReactiveList,
-  createReactiveList2,
+  createReactiveList,
+  createReactiveRefList,
 } from "./list.js";
 
 export class ReactiveObject<T extends Record<string, IReactiveItem<unknown>>>
@@ -37,27 +38,26 @@ export class ReactiveObject<T extends Record<string, IReactiveItem<unknown>>>
     if (this.#shouldTrigger) this.#trigger[0]();
     if (value instanceof ReactiveValue) {
       return value.data;
-    } else {
-      return value as Value<T[K]>;
     }
+    return value as Value<T[K]>;
   }
 
   set<K extends keyof T>(key: K, value: RealValue<T[K]> | Value<T[K]>) {
     if (isReactiveItem(value)) {
-      value = value.data as any;
+      value = value.$data() as RealValue<T[K]>;
     }
 
     const prop = this.#value[key];
-    prop.update(value);
+    prop.$update(value);
     if (this.#shouldTrigger) this.#trigger[1]();
   }
 
-  get data() {
+  $data() {
     if (this.#shouldTrigger) this.#trigger[0]();
     return this.#value;
   }
 
-  update(value: T) {
+  $update(value: T) {
     batch(() => {
       for (const key in value) {
         this.set(key, value[key] as any);
@@ -68,20 +68,25 @@ export class ReactiveObject<T extends Record<string, IReactiveItem<unknown>>>
   }
 }
 
-export type ReactiveObjectType<T> = { [K in keyof T]: Value<T[K]> };
+export type ReactiveObjectType<T> = IReactiveItem<T> & {
+  [K in keyof T]: Value<T[K]>;
+};
 
 function createObjectProxy<T extends Record<string, IReactiveItem<unknown>>>(
   object: ReactiveObject<T>
 ): ReactiveObjectType<T> {
   return new Proxy(object, {
     get(target, key) {
+      if (key === "$data" || key === "$update") {
+        return (...args: unknown[]) => target[key](...(args as any));
+      }
       return target.get(key as any);
     },
     set(target, key, value) {
       target.set(key as any, value);
       return true;
     },
-  }) as { [K in keyof T]: Value<T[K]> };
+  }) as { [K in keyof T]: Value<T[K]> } & IReactiveItem<T>;
 }
 
 export type Reactive<T> = {
@@ -96,7 +101,7 @@ export function createObject<T extends Record<string, IReactiveItem<unknown>>>(
 }
 
 type ReactiveType<T> = T extends Array<infer V>
-  ? ReactiveArray<ReactiveType<V>, ReactiveType<V>>
+  ? ReactiveArray<V, ReactiveType<V>>
   : T extends { [key: string]: unknown }
   ? ReactiveObjectType<{ [P in keyof T]: ReactiveType<T[P]> }>
   : ReactiveValue<T>;
@@ -114,9 +119,11 @@ export function fromValue<T>(object: T, equal?: Equality<T>): ReactiveType<T> {
 export function fromArray<T extends object>(
   list: T[],
   equal?: Equality<T>
-): ReactiveArray<ReactiveType<T>, ReactiveType<T>> {
-  const mapped = list.map((m) => fromValue(m, equal));
-  return createReactiveList2(() => mapped);
+): ReactiveArray<T, ReactiveType<T>> {
+  return createReactiveRefList<T, ReactiveType<T>>(
+    () => list,
+    (item) => fromValue(item, equal)
+  );
 }
 
 export function fromObject<T extends Record<string, IReactiveItem<unknown>>>(

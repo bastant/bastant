@@ -1,6 +1,13 @@
-import { Trigger, createTrigger } from "@solid-primitives/trigger";
-import { Accessor, batch, createEffect, on, untrack } from "solid-js";
-import { AReactiveItem, IReactiveItem, Value } from "./types.js";
+import { type Trigger, createTrigger } from "@solid-primitives/trigger";
+import {
+  type Accessor,
+  batch,
+  createEffect,
+  on,
+  untrack,
+  $TRACK,
+} from "solid-js";
+import { AReactiveItem, type IReactiveItem, Value } from "./types.js";
 import { ReactiveValue } from "./value.js";
 
 export type Factory<T, C extends IReactiveItem<T>> = (item: T) => C;
@@ -8,20 +15,20 @@ export type Factory<T, C extends IReactiveItem<T>> = (item: T) => C;
 export interface IReactiveReadonlyList<T> extends Iterable<T> {
   readonly length: number;
   items(): T[];
-  item(index: number): T | undefined;
+  at(index: number): T | undefined;
 }
 
-export interface IReactiveList<T, C = T> extends IReactiveReadonlyList<C> {
+export interface IReactiveList<T, C = T>
+  extends IReactiveItem<T[], C[]>,
+    IReactiveReadonlyList<C> {
   push(...items: T[]): void;
   pop(): T | undefined;
   insert(idx: number, value: T): boolean;
   truncate(len: number): void;
+  slice(start?: number, end?: number): IReactiveList<T, C>;
 }
 
-export class ReactiveList<T>
-  extends AReactiveItem
-  implements IReactiveList<T>, IReactiveItem<T[]>
-{
+export class ReactiveList<T> extends AReactiveItem implements IReactiveList<T> {
   #items: T[];
   #trigger: Trigger;
 
@@ -30,10 +37,10 @@ export class ReactiveList<T>
     this.#items = items;
     this.#trigger = createTrigger();
   }
-  get data() {
+  $data() {
     return this.items();
   }
-  update(items: T[]): void {
+  $update(items: T[]): void {
     this.#items = [...items];
     this.#trigger[1]();
   }
@@ -43,7 +50,7 @@ export class ReactiveList<T>
     return this.#items.length;
   }
 
-  item(index: number): T | undefined {
+  at(index: number): T | undefined {
     this.#trigger[0]();
     return this.#items[index];
   }
@@ -82,6 +89,12 @@ export class ReactiveList<T>
     this.#trigger[1]();
   }
 
+  slice(start?: number, end?: number | undefined): IReactiveList<T, T> {
+    this.#trigger[0]();
+    const sliced = this.#items.slice(start, end);
+    return new ReactiveList(sliced);
+  }
+
   [Symbol.iterator](): Iterator<T, any, undefined> {
     return this.items()[Symbol.iterator]();
   }
@@ -94,23 +107,23 @@ export class ReactiveRefList<T, C extends IReactiveItem<T>>
   #items: ReactiveList<C>;
   #factory: Factory<T, C>;
 
-  constructor(items: T[] = [], factory: Factory<T, C>) {
+  constructor(items: T[], factory: Factory<T, C>) {
     super();
     this.#items = new ReactiveList(items.map(factory));
     this.#factory = factory;
   }
-  get data() {
+  $data() {
     return this.items();
   }
 
-  update(items: T[]): void {
+  $update(items: T[]): void {
     batch(() => {
       for (
         let i = 0, len = Math.min(items.length, this.#items.length);
         i < len;
         i++
       ) {
-        this.#items.item(i)?.update(items[i]);
+        this.#items.at(i)?.$update(items[i]);
       }
 
       if (items.length > this.#items.length) {
@@ -123,14 +136,14 @@ export class ReactiveRefList<T, C extends IReactiveItem<T>>
       }
     });
   }
-  item(index: number): C | undefined {
-    return this.#items.item(index);
+  at(index: number): C | undefined {
+    return this.#items.at(index);
   }
   truncate(len: number): void {
     this.#items.truncate(len);
   }
 
-  [Symbol.iterator](): Iterator<C, any, undefined> {
+  [Symbol.iterator](): Iterator<C, unknown, undefined> {
     return this.#items[Symbol.iterator]();
   }
 
@@ -144,7 +157,7 @@ export class ReactiveRefList<T, C extends IReactiveItem<T>>
 
   pop() {
     const ret = this.#items.pop();
-    return untrack(() => ret?.data);
+    return untrack(() => ret?.$data());
   }
 
   insert(idx: number, value: T): boolean {
@@ -152,34 +165,23 @@ export class ReactiveRefList<T, C extends IReactiveItem<T>>
       return false;
     }
 
-    this.#items.item(idx)?.update(value);
+    this.#items.at(idx)?.$update(value);
 
     return true;
+  }
+
+  slice(
+    start?: number | undefined,
+    end?: number | undefined
+  ): IReactiveList<T, C> {
+    const output = new ReactiveRefList([], this.#factory);
+    output.#items = this.#items.slice(start, end) as unknown as ReactiveList<C>;
+    return output;
   }
 
   items() {
     return this.#items.items();
   }
-}
-
-export function createReactiveRefList<T, C extends IReactiveItem<T>>(
-  items: Accessor<T[] | undefined>,
-  factory: Factory<T, C>
-) {
-  const list = new ReactiveRefList<T, C>([], factory);
-  createEffect(() => {
-    list.update(items() ?? []);
-  });
-
-  return list;
-}
-
-export function createReactiveList<T>(items: Accessor<T[] | undefined>) {
-  const list = new ReactiveList<T>([]);
-  createEffect(() => {
-    list.update(items() ?? []);
-  });
-  return list;
 }
 
 export type ReactiveArray<T, C> = IReactiveList<T, C> & Array<C>;
@@ -193,54 +195,91 @@ function createProxy<T, C>(
       items,
       (items) => {
         if (items) {
-          list.update(items);
+          list.$update(items);
         }
       },
       { defer: true }
     )
   );
 
-  return new Proxy(list, {
-    get(target, p, receiver) {
-      let idx = NaN;
-      try {
-        idx = parseInt(p as string);
-      } catch {}
+  return new Proxy(
+    {
+      at(idx: number) {
+        return list.at(idx);
+      },
+      insert(idx: number, value: T) {
+        return list.insert(idx, value);
+      },
+      get length() {
+        return list.length;
+      },
+      push(...args: T[]) {
+        list.push(...args);
+      },
+      pop() {
+        return list.pop();
+      },
+      items() {
+        return list.items();
+      },
+      [Symbol.iterator]() {
+        return list[Symbol.iterator]();
+      },
+      truncate(len) {
+        return list.truncate(len);
+      },
+      slice(start, end) {
+        return list.slice(start, end);
+      },
+      $update(value: T[]) {
+        return list.$update(value);
+      },
+      $data() {
+        return list.$data();
+      },
+    } satisfies IReactiveList<T, C>,
+    {
+      get(target, p, receiver) {
+        let idx = Number.NaN;
+        try {
+          idx = Number.parseInt(p as string);
+        } catch {}
 
-      if (!isNaN(idx)) {
-        return target.item(idx);
-      } else {
-        if (p == "push") {
-          return (...args) => target.push(...args);
+        if (!Number.isNaN(idx)) {
+          return target.at(idx);
         }
-        return Reflect.get(target, p);
-      }
-    },
-    set(target, p, newValue, receiver) {
-      let idx = NaN;
-      try {
-        idx = parseInt(p as string);
-      } catch {}
-      if (!isNaN(idx)) {
-        return target.insert(idx, newValue);
-      } else {
-        return Reflect.set(target, p, newValue);
-      }
-    },
-  }) as any;
+
+        if (p === $TRACK) {
+          return target.$data();
+        }
+
+        return Reflect.get(target, p, receiver);
+      },
+      set(target, p, newValue, receiver) {
+        let idx = Number.NaN;
+        try {
+          idx = Number.parseInt(p as string);
+        } catch {}
+        if (!Number.isNaN(idx)) {
+          return target.insert(idx, newValue);
+        }
+        return Reflect.set(target, p, newValue, receiver);
+      },
+    }
+  ) as unknown as ReactiveArray<T, C>;
 }
 
-export function createReactiveList2<T, C>(
+export function createReactiveList<T, C>(
   items: Accessor<T[] | undefined>
 ): ReactiveArray<T, T> {
   const list = new ReactiveList<T>(items());
   return createProxy(list, items);
 }
 
-export function createReactiveRefList2<T, C extends IReactiveItem<T>>(
+export function createReactiveRefList<T, C extends IReactiveItem<T>>(
   items: Accessor<T[] | undefined>,
   factory: Factory<T, C>
 ): ReactiveArray<T, C> {
-  const list = new ReactiveRefList<T, C>(items(), factory);
+  const list = new ReactiveRefList<T, C>(items() ?? [], factory);
   return createProxy(list, items);
 }

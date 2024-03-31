@@ -1,6 +1,6 @@
 import deepEqual from "deep-equal";
-import { AReactiveItem, Equality, IReactiveItem } from "./types.js";
-import { Trigger, createTrigger } from "@solid-primitives/trigger";
+import { AReactiveItem, type Equality, type IReactiveItem } from "./types.js";
+import { type Trigger, createTrigger } from "@solid-primitives/trigger";
 
 export class Bag<T extends object>
   extends AReactiveItem
@@ -25,7 +25,11 @@ export class Bag<T extends object>
     return this.#item;
   }
 
-  update(item: Partial<T>): void {
+  $data() {
+    return this.data;
+  }
+
+  $update(item: Partial<T>): void {
     this.#item = { ...item };
     this.#trigger[1]();
   }
