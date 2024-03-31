@@ -12,6 +12,7 @@
   "dependencies": {
     "@bastant/animate": "workspace:*",
     "@bastant/barstil": "workspace:*",
+    "@bastant/reactive": "workspace:*",
     "@bastant/base": "workspace:*",
     "@bastant/form": "workspace:*",
     "@bastant/i18n": "workspace:*",

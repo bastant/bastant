@@ -37,6 +37,11 @@ function App() {
                 Modals
               </A>
             </li>
+            <li>
+              <A href="/list" activeClass="active">
+                List
+              </A>
+            </li>
           </ul>
         </nav>
       </Fixed>
@@ -95,6 +100,7 @@ function App() {
               path="/modals"
               component={lazy(() => import("./modal.js"))}
             />
+            <Route path="/list" component={lazy(() => import("./list.js"))} />
           </Routes>
         </main>
       </Reveal>
