@@ -32,7 +32,7 @@ export interface FormOptions<T> {
 export interface FormApi<T> {
   field<K extends keyof T>(name: K): FieldApi<T[K]>;
   values: Accessor<Partial<T>>;
-  submit(e?: Event): void;
+  submit(e?: Event): Promise<void>;
   clear(): void;
   reset(): void;
   status: Accessor<Status>;
