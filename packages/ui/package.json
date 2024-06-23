@@ -1,0 +1,49 @@
+{
+  "name": "@bastant/ui",
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "repository": "https://github.com/bastant/bastant",
+  "exports": {
+    ".": {
+      "solid": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/source/index.js"
+      },
+      "import": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "browser": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      },
+      "node": {
+        "types": "./dist/types/index.d.ts",
+        "default": "./dist/cjs/index.js"
+      }
+    }
+  },
+  "peerDependencies": {
+    "solid-js": "^1.8.17"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -cw",
+    "prepublish": "rollup -c"
+  },
+  "devDependencies": {
+    "rollup": "^4.18.0",
+    "rollup-preset-solid": "^2.0.1",
+    "solid-js": "^1.8.17"
+  }
+}
