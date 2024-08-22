@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "ESNext",
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",  
+    "moduleResolution": "node",
+    "lib": ["ES2019", "DOM"],
+    "rootDir": "src",
+    "outDir": "lib",
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "declarationDir": "./lib/",
+    "strict": true
+  }
+}
